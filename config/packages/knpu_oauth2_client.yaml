@@ -1,0 +1,8 @@
+knpu_oauth2_client:
+    clients:
+        slack:
+            type: slack
+            client_id: '%env(OAUTH_SLACK_CLIENT_ID)%'
+            client_secret: '%env(OAUTH_SLACK_CLIENT_SECRET)%'
+            redirect_route: connect_slack_check
+            redirect_params: {}

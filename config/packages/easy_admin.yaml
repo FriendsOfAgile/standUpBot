@@ -1,0 +1,48 @@
+easy_admin:
+    site_name: 'StandUp Bot'
+    user:
+        display_name: true
+        display_avatar: true
+        name_property_path: "name"
+        avatar_property_path: "avatar"
+    entities:
+        User:
+            class: App\Entity\User
+            label: "Users"
+            list:
+                fields:
+                    - {property: "avatar", label: "", type: "image"}
+                    - {property: "name", label: "Name", type: "text"}
+                    - {property: "email", label: "Email", type: "email"}
+                    - {property: "type", label: "Type", type: "text"}
+                    - {property: "space.name", label: "Space", type: "text"}
+                    - {property: "isAdmin", label: "Admin"}
+
+        Space:
+            label: "Spaces"
+            class: App\Entity\Space
+            list:
+                fields:
+                    - {property: "avatar", label: "", type: "image"}
+                    - {property: "name", label: "Name", type: "text"}
+                    - {property: "type", label: "Type", type: "text"}
+                    - {property: "users", label: "Users"}
+        Config:
+            label: "Configs"
+            class: App\Entity\StandUpConfig
+
+        StandUp:
+            label: "StandUps"
+            class: App\Entity\StandUp
+
+        Carma:
+            label: "Carma"
+            class: App\Entity\Carma
+
+        Question:
+            label: "Question"
+            class: App\Entity\Question
+
+        Answer:
+            label: "Answer"
+            class: App\Entity\Answer
