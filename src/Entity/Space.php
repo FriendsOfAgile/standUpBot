@@ -43,6 +43,16 @@ class Space
      */
     private $standUpConfigs;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $token;
+
+    /**
+     * @ORM\Column(type="string", length=500, nullable=true)
+     */
+    private $avatar;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -148,6 +158,30 @@ class Space
                 $standUpConfig->setSpace(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }
