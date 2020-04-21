@@ -57,7 +57,7 @@ class User implements UserInterface
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Carma", mappedBy="user", orphanRemoval=true)
      */
-    private $carmas;
+    private $carma;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\StandUp", mappedBy="user", orphanRemoval=true)
@@ -162,15 +162,15 @@ class User implements UserInterface
     /**
      * @return Collection|Carma[]
      */
-    public function getCarmas(): Collection
+    public function getCarma(): Collection
     {
-        return $this->carmas;
+        return $this->carma;
     }
 
     public function addCarma(Carma $carma): self
     {
-        if (!$this->carmas->contains($carma)) {
-            $this->carmas[] = $carma;
+        if (!$this->carma->contains($carma)) {
+            $this->carma[] = $carma;
             $carma->setUser($this);
         }
 
@@ -179,8 +179,8 @@ class User implements UserInterface
 
     public function removeCarma(Carma $carma): self
     {
-        if ($this->carmas->contains($carma)) {
-            $this->carmas->removeElement($carma);
+        if ($this->carma->contains($carma)) {
+            $this->carma->removeElement($carma);
             // set the owning side to null (unless already changed)
             if ($carma->getUser() === $this) {
                 $carma->setUser(null);

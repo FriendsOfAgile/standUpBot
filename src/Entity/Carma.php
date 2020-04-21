@@ -17,13 +17,13 @@ class Carma
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="carmas")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="carma")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="carmas")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
