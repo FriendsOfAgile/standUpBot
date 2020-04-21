@@ -2,6 +2,23 @@
     "adam-paterson/oauth2-slack": {
         "version": "1.1.3"
     },
+    "api-platform/api-pack": {
+        "version": "v1.2.2"
+    },
+    "api-platform/core": {
+        "version": "2.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.5",
+            "ref": "a93061567140e386f107be75340ac2aee3f86cbf"
+        },
+        "files": [
+            "config/packages/api_platform.yaml",
+            "config/routes/api_platform.yaml",
+            "src/Entity/.gitignore"
+        ]
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -94,6 +111,9 @@
     "egulias/email-validator": {
         "version": "2.1.17"
     },
+    "fig/link-util": {
+        "version": "1.1.0"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.5.3"
     },
@@ -123,6 +143,18 @@
     },
     "monolog/monolog": {
         "version": "2.0.2"
+    },
+    "nelmio/cors-bundle": {
+        "version": "1.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.5",
+            "ref": "6388de23860284db9acce0a7a5d9d13153bcb571"
+        },
+        "files": [
+            "config/packages/nelmio_cors.yaml"
+        ]
     },
     "nikic/php-parser": {
         "version": "v4.4.0"
@@ -553,6 +585,9 @@
     },
     "webmozart/assert": {
         "version": "1.8.0"
+    },
+    "willdurand/negotiation": {
+        "version": "v2.3.1"
     },
     "wohali/oauth2-discord-new": {
         "version": "v1.0.0"
