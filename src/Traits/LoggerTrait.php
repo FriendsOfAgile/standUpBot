@@ -11,7 +11,7 @@ namespace App\Traits;
 
 use Psr\Log\LoggerInterface;
 
-class LoggerTrait
+trait LoggerTrait
 {
     /** @var LoggerInterface */
     private $logger;

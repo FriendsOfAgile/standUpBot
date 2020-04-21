@@ -5,11 +5,12 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -51,7 +52,7 @@ class User
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isAdmin;
+    private $isAdmin = false;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Carma", mappedBy="user", orphanRemoval=true)
@@ -219,4 +220,42 @@ class User
 
         return $this;
     }
+
+    public function getRoles()
+    {
+        $roles = array(
+            'ROLE_USER'
+        );
+
+        if ($this->getIsAdmin())
+            $roles[] = 'ROLE_ADMIN';
+
+        return array_unique($roles);
+    }
+
+    public function getPassword()
+    {
+        // TODO: Implement getPassword() method.
+    }
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function getUsername()
+    {
+        $type = 'admin';
+        if ($this->getSpace())
+            $type = $this->getSpace()->getType();
+
+        return sprintf('%s@%s', $this->getUid(), $type);
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+
 }

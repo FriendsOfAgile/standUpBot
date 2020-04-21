@@ -29,7 +29,8 @@ class AuthController extends AbstractController
             'bot',
             'channels:read',
             'team:read',
-            'users:read'
+            'users:read',
+            'users:read.email'
         );
         return $clientRegistry->getClient('slack')->redirect($scopes, []);
     }

@@ -21,12 +21,9 @@ class SlackService
     /** @var string|null */
     private $accessToken;
 
-    /**
-     * @return string|null
-     */
-    public function getAccessToken(): ?string
+    public function __construct(string $accessToken)
     {
-        return $this->accessToken;
+        $this->accessToken = $accessToken;
     }
 
     /**
@@ -39,10 +36,16 @@ class SlackService
         return $this;
     }
 
-
-    public function getTeamInfo()
+    /**
+     * @param string|null $teamId
+     * @return array|null
+     */
+    public function getTeamInfo(string $teamId = null)
     {
-        return $this->get('team.info');
+        $options = array();
+        if ($teamId)
+            $options['team'] = $teamId;
+        return $this->get('team.info', $options);
     }
 
     protected function request(string $endpoint, string $method = 'GET', array $data = array()): ?array
