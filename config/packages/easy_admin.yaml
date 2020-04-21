@@ -1,0 +1,17 @@
+easy_admin:
+    site_name: 'StandUp Bot'
+    entities:
+        - App\Entity\User
+        - App\Entity\Space
+        - App\Entity\StandUpConfig
+#    entities:
+#        Users:
+#            label: 'Users'
+#            class: App\Entity\User
+#            list:
+#                title: 'List of users'
+#                fields: ['name', 'email']
+#        Spaces:
+#            class: App\Entity\Space
+#        Configs:
+#            class: App\Entity\StandUpConfig
