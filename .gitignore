@@ -1,3 +1,8 @@
+###> frontend stuff
+.DS_Store
+/frontend/node_modules
+/frontend/dist
+
 /.idea
 
 ###> symfony/framework-bundle ###
