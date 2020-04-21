@@ -221,6 +221,14 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getType(): string
+    {
+        $type = 'admin';
+        if ($this->getSpace())
+            $type = $this->getSpace()->getType();
+        return $type;
+    }
+
     public function getRoles()
     {
         $roles = array(
@@ -245,11 +253,7 @@ class User implements UserInterface
 
     public function getUsername()
     {
-        $type = 'admin';
-        if ($this->getSpace())
-            $type = $this->getSpace()->getType();
-
-        return sprintf('%s@%s', $this->getUid(), $type);
+        return sprintf('%s@%s', $this->getUid(), $this->getType());
     }
 
     public function eraseCredentials()
