@@ -25,6 +25,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          - node-version: '13.x'
+
+      - name: Build Vue App
+        run: npm install && npm run build
+
       - name: Setup PHP, extensions and composer with shivammathur/setup-php
         uses: shivammathur/setup-php@v2
         with:
@@ -61,12 +69,13 @@ jobs:
       - name: Coding standards checks (php_codesniffer + PHPStan)
         run: make cs
 
-#      - name: Load Doctrine fixtures and populate the Elasticsearch indexes
-#        run: |
-#          make load-fixtures
-#          make populate
-#
-#      - name: Run functionnal and unit tests
-#        run: |
-#          cp phpunit.xml.ci phpunit.xml
-#          make test
+      - name: Deploy via SSH
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: "./."
+          target: /home/${{ secrets.USERNAME }}/web/${{ secrets.HOST }}/public_html/
+          overwrite: true
