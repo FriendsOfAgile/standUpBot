@@ -5,7 +5,7 @@
             <div class="w-full flex mt-4 space-x-6">
                 <img class="mt-2 cursor-pointer" :src="require('../assets/img/slack-logo.png')" />
                 <img class="mt-2 cursor-pointer" :src="require('../assets/img/ms-teams.png')" />
-                <img class="mt-2 ml-6 cursor-pointer" :src="require('../assets/img/discord-logo.png')" />
+                <img class="mt-2 cursor-pointer" :src="require('../assets/img/discord-logo.png')" />
             </div>
 
         </div>
