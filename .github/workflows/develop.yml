@@ -59,9 +59,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: "./.,!.env"
+          source: "./.,!.env,!.git"
           target: /home/${{ secrets.USERNAME }}/web/${{ secrets.HOST }}/public_html/
-          overwrite: true
+          rm: true
 
       - name: Flush Database
         uses: appleboy/ssh-action@master
