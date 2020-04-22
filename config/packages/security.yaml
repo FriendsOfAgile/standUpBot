@@ -15,6 +15,9 @@ security:
             anonymous: lazy
             provider: users_in_memory
 
+            logout:
+                path: logout
+
             guard:
                 authenticators:
                     - App\Security\SlackAuthenticator
