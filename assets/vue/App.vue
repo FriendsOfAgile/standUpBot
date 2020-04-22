@@ -8,7 +8,7 @@
 <style>
     @font-face {
         font-family: "Rubik";
-        src: url("assets/fonts/Rubik-Regular.ttf") format("ttf");
+        src: url("../fonts/Rubik-Regular.ttf") format("ttf");
     }
     body {
         min-height: 100%;

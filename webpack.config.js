@@ -1,4 +1,4 @@
-var Encore = require('@symfony/webpack-encore');
+let Encore = require('@symfony/webpack-encore');
 
 Encore
     .setOutputPath('public/build/')
@@ -16,6 +16,7 @@ Encore
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     .enableVersioning(Encore.isProduction())
+    .enablePostCssLoader()
 ;
 
 module.exports = Encore.getWebpackConfig();

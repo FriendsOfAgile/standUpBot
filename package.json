@@ -6,10 +6,7 @@
         "dev-server": "encore dev-server",
         "dev": "encore dev",
         "watch": "encore dev --watch",
-        "build": "encore production --progress",
-        "serve": "vue-cli-service serve",
-        "vue-build": "vue-cli-service build",
-        "lint": "vue-cli-service lint"
+        "build": "encore production --progress"
     },
     "dependencies": {
         "core-js": "^3.6.4",
@@ -23,6 +20,7 @@
     },
     "devDependencies": {
         "@symfony/webpack-encore": "github:symfony/webpack-encore",
+        "postcss-loader": "^3.0.0",
         "webpack-notifier": "^1.8.0"
     }
 }
