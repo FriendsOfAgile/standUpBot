@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - develop
-      - feature/deploy
 jobs:
   symfony:
     name: Symfony 5.0 (PHP ${{ matrix.php-versions }})
