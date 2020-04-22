@@ -1,10 +1,16 @@
 <template>
-    <DashboardLeftMenu />
+    <div class="w-full flex">
+        <DashboardLeftMenu />
+        <div class="flex">
+            <h3>Dashboard</h3>
+        </div>
+    </div>
+
 </template>
 
 <script>
 
-import DashboardLeftMenu from "../DashboardLeftMenu.vue";
+import DashboardLeftMenu from "../components/DashboardLeftMenu.vue";
 export default {
   name: 'Home',
   components: {

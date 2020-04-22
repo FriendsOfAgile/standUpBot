@@ -19,6 +19,10 @@
         font-family: 'Rubik', 'Roboto', sans-serif;
     }
 
+    .router-link-active > svg {
+        color: #7e91ff;
+    }
+
     /* transitions */
     .component-fade-enter-active {
         transition: opacity .3s ease;

@@ -1,11 +1,14 @@
 <template>
-    <main>
+    <div class="w-full flex">
         <DashboardLeftMenu />
-    </main>
+        <div class="flex">
+            <h3>Manage Standup</h3>
+        </div>
+    </div>
 </template>
 
 <script>
-    import DashboardLeftMenu from "../DashboardLeftMenu.vue";
+    import DashboardLeftMenu from "../components/DashboardLeftMenu.vue";
   export default {
     name: "ManageStandup",
     components: {
