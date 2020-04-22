@@ -1,8 +1,7 @@
 ###> frontend stuff
 .DS_Store
-/frontend/node_modules
-/frontend/dist
-/frontend/.idea
+/node_modules/
+/assets/vue/dist
 
 /.idea
 
@@ -22,3 +21,10 @@
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###
