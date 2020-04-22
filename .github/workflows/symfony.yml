@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php-versions: ['7.2', '7.4']
+        php-versions: ['7.4']
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -28,12 +28,15 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v1
         with:
-          - node-version: '13.x'
+          node-version: '13.x'
 
       - name: Build Vue App
         run: npm install && npm run build
 
-      - name: Setup PHP, extensions and composer with shivammathur/setup-php
+      - name: Copy .env file
+        run: cp .env.ci .env
+
+      - name: Setup PHP, extensions and composer
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
