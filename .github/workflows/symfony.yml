@@ -61,17 +61,6 @@ jobs:
       - name: Install Composer dependencies
         run: composer install
 
-      - name: Check Symfony requirements
-        run: vendor/bin/requirements-checker
-
-      - name: Check the Symfony console
-        run: |
-          php bin/console -V
-          php bin/console strangebuzz:version
-
-      - name: Coding standards checks (php_codesniffer + PHPStan)
-        run: make cs
-
       - name: Deploy via SSH
         uses: appleboy/scp-action@master
         with:
