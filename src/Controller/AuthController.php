@@ -33,12 +33,4 @@ class AuthController extends AbstractController
             return $this->redirect('/dashboard');
         return $this->redirect('/login');
     }
-
-    /**
-     * @Route("/logout", name="logout")
-     */
-    public function logout()
-    {
-        return $this->redirect('/login');
-    }
 }

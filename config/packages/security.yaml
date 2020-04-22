@@ -16,7 +16,8 @@ security:
             provider: users_in_memory
 
             logout:
-                path: logout
+                path: /logout
+                target: /
 
             guard:
                 authenticators:
