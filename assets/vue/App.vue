@@ -6,6 +6,20 @@
   </div>
 </template>
 
+<script>
+    export default {
+        data() {
+            return {
+                user: null
+            }
+        },
+        mounted() {
+            if (window.user) {
+                this.user = window.user
+            }
+        }
+    }
+</script>
 
 <style>
     @font-face {

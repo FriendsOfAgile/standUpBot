@@ -4,16 +4,17 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class VueController extends AbstractController
 {
     /**
      * @Route("/{vueRouting}", requirements={"vueRouting"="^(?!api|_(profiler|wdt)|admin).*"}, name="vue")
      */
-    public function index()
+    public function index(SerializerInterface $serializer)
     {
         return $this->render('vue/index.html.twig', [
-            'controller_name' => 'VueController',
+            'user' => $serializer->serialize($this->getUser(), 'jsonld')
         ]);
     }
 

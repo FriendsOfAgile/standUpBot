@@ -6,7 +6,8 @@
         "dev-server": "encore dev-server",
         "dev": "encore dev",
         "watch": "encore dev --watch",
-        "build": "encore production --progress"
+        "build": "encore production --progress",
+        "symfony": "symfony server:start -d && npm run dev-server"
     },
     "dependencies": {
         "core-js": "^3.6.4",
