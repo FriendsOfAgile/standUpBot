@@ -22,8 +22,9 @@ class VueController extends AbstractController
      */
     public function home()
     {
-        if (!$this->getUser())
+        if (!$this->getUser()) {
             return $this->redirect('/login');
+        }
         return $this->redirect('/dashboard');
     }
 }
