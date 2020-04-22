@@ -101,13 +101,13 @@ class SlackAuthenticator extends SocialAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        $message = strstr($exception->getMessageKey(), $exception->getMessageData());
+        $message = strstr($exception->getMessageKey(), $exception->getMessage());
         return new Response($message, Response::HTTP_FORBIDDEN);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
     {
-        $targetUrl = $this->router->generate('dashboard');
+        $targetUrl = $this->router->generate('home');
         return new RedirectResponse($targetUrl);
     }
 

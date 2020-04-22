@@ -16,4 +16,14 @@ class VueController extends AbstractController
             'controller_name' => 'VueController',
         ]);
     }
+
+    /**
+     * @Route("/", name="home")
+     */
+    public function home()
+    {
+        if (!$this->getUser())
+            return $this->redirect('/login');
+        return $this->redirect('/dashboard');
+    }
 }
