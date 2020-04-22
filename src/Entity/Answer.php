@@ -36,6 +36,12 @@ class Answer
      */
     private $sort;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\StandUp", inversedBy="answers")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $standUp;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +91,18 @@ class Answer
     public function setSort(int $sort): self
     {
         $this->sort = $sort;
+
+        return $this;
+    }
+
+    public function getStandUp(): ?StandUp
+    {
+        return $this->standUp;
+    }
+
+    public function setStandUp(?StandUp $standUp): self
+    {
+        $this->standUp = $standUp;
 
         return $this;
     }
