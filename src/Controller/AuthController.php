@@ -14,6 +14,9 @@ class AuthController extends AbstractController
      */
     public function login()
     {
+        if ($this->getUser())
+            return $this->redirectToRoute('home');
+
         $availableServices = array(
             'Slack' => array(
                 'image' => '/images/slack-logo.png',
