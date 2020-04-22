@@ -1,22 +1,13 @@
-name: Full CI process for Symfony 5
+name: Develop
 on:
   push:
     branches:
-      - master
       - develop
       - feature/deploy
 jobs:
   symfony:
     name: Symfony 5.0 (PHP ${{ matrix.php-versions }})
     runs-on: ubuntu-18.04
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     strategy:
       fail-fast: true
       matrix:
@@ -68,6 +59,18 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: "./."
+          source: "./.,!.env"
           target: /home/${{ secrets.USERNAME }}/web/${{ secrets.HOST }}/public_html/
           overwrite: true
+
+      - name: Flush Database
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/${{ secrets.USERNAME }}/web/${{ secrets.HOST }}/public_html/
+            php bin/console doctrine:schema:drop --forse --full-database --quiet --no-interaction || true
+            php bin/console doctrine:schema:create --quiet --no-interaction
