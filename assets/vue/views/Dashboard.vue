@@ -1,8 +1,7 @@
 <template>
     <div class="w-full flex">
-        <DashboardLeftMenu />
-        <div class="flex">
-            <h3>Dashboard</h3>
+        <div class="flex p-6">
+            <h3 class="font-bold text-2xl text-gray-700">Dashboard</h3>
         </div>
     </div>
 

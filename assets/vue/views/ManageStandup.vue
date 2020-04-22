@@ -1,19 +1,15 @@
 <template>
     <div class="w-full flex">
-        <DashboardLeftMenu />
-        <div class="flex">
-            <h3>Manage Standup</h3>
+        <div class="flex p-6">
+            <h3 class="font-bold text-2xl text-gray-700">Manage Standup</h3>
         </div>
     </div>
 </template>
 
 <script>
-    import DashboardLeftMenu from "../components/DashboardLeftMenu.vue";
   export default {
     name: "ManageStandup",
-    components: {
-      DashboardLeftMenu
-    }
+    
   }
 </script>
 

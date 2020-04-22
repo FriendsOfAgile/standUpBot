@@ -1,10 +1,20 @@
 <template>
-  <div id="app">
+  <div id="app" class="w-full flex">
+      <DashboardLeftMenu />
       <transition name="component-fade" mode="out-in">
           <router-view/>
       </transition>
   </div>
 </template>
+
+
+
+<script>
+    import DashboardLeftMenu from "./components/DashboardLeftMenu";
+    export default {
+      components: {DashboardLeftMenu}
+    }
+</script>
 
 
 <style>
