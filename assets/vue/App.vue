@@ -18,8 +18,8 @@
         flex-direction: column;
         font-family: 'Rubik', 'Roboto', sans-serif;
     }
-    /* transitions */
 
+    /* transitions */
     .component-fade-enter-active {
         transition: opacity .3s ease;
     }
