@@ -1,10 +1,34 @@
 <template>
-  <div id="app">
+  <div id="app" class="w-full flex">
+      <DashboardLeftMenu />
       <transition name="component-fade" mode="out-in">
           <router-view/>
       </transition>
   </div>
 </template>
+
+<script>
+    export default {
+        data() {
+            return {
+                user: null
+            }
+        },
+        mounted() {
+            if (window.user) {
+                this.user = window.user
+            }
+        }
+    }
+</script>
+
+
+<script>
+    import DashboardLeftMenu from "./components/DashboardLeftMenu";
+    export default {
+      components: {DashboardLeftMenu}
+    }
+</script>
 
 
 <style>
@@ -17,6 +41,10 @@
         display: flex;
         flex-direction: column;
         font-family: 'Rubik', 'Roboto', sans-serif;
+    }
+
+    .router-link-active > svg {
+        color: #7e91ff;
     }
 
     /* transitions */

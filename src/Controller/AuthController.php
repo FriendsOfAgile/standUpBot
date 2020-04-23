@@ -10,6 +10,34 @@ use Symfony\Component\Routing\Annotation\Route;
 class AuthController extends AbstractController
 {
     /**
+     * @Route("/login", methods={"GET"}, name="login")
+     */
+    public function login()
+    {
+        if ($this->getUser())
+            return $this->redirectToRoute('home');
+
+        $availableServices = array(
+            'Slack' => array(
+                'image' => '/images/slack-logo.png',
+                'route' => 'connect_slack_start',
+            ),
+            'MS Teams' => array(
+                'image' => '/images/ms-teams.png',
+                'route' => null
+            ),
+            'Discord' => array(
+                'image' => '/images/discord-logo.png',
+                'route' => null
+            )
+        );
+
+        return $this->render("auth/index.html.twig", [
+            'services' => $availableServices
+        ]);
+    }
+
+    /**
      * @Route("/connect/slack", name="connect_slack_start")
      */
     public function connectSlack(ClientRegistry $clientRegistry)

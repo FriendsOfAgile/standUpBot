@@ -9,6 +9,14 @@
     </head>
     <body>
         {% block body %}{% endblock %}
+
+        {% if user is defined %}
+        <script>
+            window.user = {{ user|raw }}
+        </script>
+        {% endif %}
+
+
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}

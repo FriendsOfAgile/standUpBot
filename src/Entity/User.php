@@ -7,9 +7,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource
+ * @ApiResource(
+ *     itemOperations={
+ *          "get",
+ *          "put"
+ *     },
+ *     collectionOperations={
+ *          "get",
+ *          "post"={"access_control"="is_granted('ROLE_ADMIN')"}
+ *     },
+ *     normalizationContext={"groups"={"user:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"user:write"}, "swagger_definition_name"="Write"}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User implements UserInterface
@@ -27,6 +40,8 @@ class User implements UserInterface
     private $uid;
 
     /**
+     * @Assert\NotBlank()
+     * @Groups({"user:read", "user:write"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $email;
@@ -37,16 +52,20 @@ class User implements UserInterface
     private $space;
 
     /**
+     * @Assert\NotBlank()
+     * @Groups({"user:read", "user:write"})
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Groups({"user:read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $avatar;
 
     /**
+     * @Groups({"user:read"})
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $timeZone;
