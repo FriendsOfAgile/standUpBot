@@ -18,6 +18,7 @@
         mounted() {
             if (window.user) {
                 this.$store.state.user = window.user;
+                delete(window.user);
             }
         }
     }
