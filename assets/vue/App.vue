@@ -13,12 +13,11 @@
         components: {DashboardLeftMenu},
         data() {
             return {
-                user: null
             }
         },
         mounted() {
             if (window.user) {
-                this.user = window.user
+                this.$store.state.user = window.user;
             }
         }
     }

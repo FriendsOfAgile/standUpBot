@@ -1,7 +1,7 @@
 <template>
     <div class="px-6 py-4 h-fullVh shadow-xl space-y-6 flex flex-col items-center">
         <router-link to="/">
-            <img src="/images/logo.png" class="pb-6" alt="logo"/>
+            <img class="rounded-full" :src="userAvatar" />
         </router-link>
         <router-link  class="relative" to="/dashboard/standup/" @mouseenter.native="showNavTooltip('manageStandup')" @mouseleave.native="activeTooltip = undefined">
             <font-awesome-icon icon="cogs" class="text-gray-600 text-xl"/>
@@ -25,13 +25,19 @@
             'reports': 'Reports'
           },
         activeTooltip: undefined,
-
+        userAvatar: undefined,
       }
     },
     methods: {
       showNavTooltip(menuItem) {
         this.activeTooltip = menuItem;
-      }
+      },
+    },
+    mounted() {
+      this.$nextTick( () => {
+        this.userAvatar = this.$store.getters.getUserData.avatar;
+      })
+
     }
   }
 </script>
