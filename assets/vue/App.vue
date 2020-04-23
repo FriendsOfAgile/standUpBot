@@ -8,7 +8,9 @@
 </template>
 
 <script>
+    import DashboardLeftMenu from "./components/DashboardLeftMenu";
     export default {
+        components: {DashboardLeftMenu},
         data() {
             return {
                 user: null
@@ -19,14 +21,6 @@
                 this.user = window.user
             }
         }
-    }
-</script>
-
-
-<script>
-    import DashboardLeftMenu from "./components/DashboardLeftMenu";
-    export default {
-      components: {DashboardLeftMenu}
     }
 </script>
 
