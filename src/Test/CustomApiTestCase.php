@@ -29,14 +29,17 @@ class CustomApiTestCase extends ApiTestCase
             ->setName(ucfirst($type).' user');
 
 
-        if ($type !== 'admin') {
+        if ($type !== 'admin' && $type !== 'user') {
             $space = $this->createSpace(ucfirst($type) . ' space', $type);
             $user->setSpace($space);
-        } else {
+        }
+
+        if ($password) {
             $password = self::$container->get(UserPasswordEncoderInterface::class)
                 ->encodePassword($user, $password);
             $user->setPassword($password);
         }
+
 
         $em = $this->getEntityManager();
         $em->persist($user);
@@ -59,9 +62,9 @@ class CustomApiTestCase extends ApiTestCase
         return $space;
     }
 
-    protected function createUserAndLogIn(string $email, string $password): User
+    protected function createUserAndLogIn(string $email, string $password, string $type = 'user'): User
     {
-        $user = $this->createUser($email, 'admin', $password);
+        $user = $this->createUser($email, $type, $password);
         $this->logIn($user, $password);
         return $user;
     }

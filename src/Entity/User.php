@@ -13,11 +13,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ApiResource(
  *     itemOperations={
- *          "get",
+ *          "get"={"access_control"="object == user"},
  *          "put"
  *     },
  *     collectionOperations={
- *          "get",
+ *          "get"={"access_control"="object == user"},
  *          "post"={"access_control"="is_granted('ROLE_ADMIN')"}
  *     },
  *     normalizationContext={"groups"={"user:read"}, "swagger_definition_name"="Read"},
@@ -249,9 +249,11 @@ class User implements UserInterface
 
     public function getType(): string
     {
-        $type = 'admin';
         if ($this->getSpace())
             $type = $this->getSpace()->getType();
+        else {
+            $type = $this->getIsAdmin() ? 'admin' : 'user';
+        }
         return $type;
     }
 
@@ -279,7 +281,7 @@ class User implements UserInterface
 
     public function getUsername()
     {
-        if ($this->getType() == 'admin')
+        if (in_array($this->getType(), ['user', 'admin']))
             return $this->getEmail();
         return sprintf('%s@%s', $this->getUid(), $this->getType());
     }
