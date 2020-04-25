@@ -46,5 +46,6 @@
     .nav-item__tooltip {
         left: 2.5em;
         width: max-content;
+        display: table; /* safari hack */
     }
 </style>
