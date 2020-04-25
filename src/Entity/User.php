@@ -85,6 +85,11 @@ class User implements UserInterface
      */
     private $standUps;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $password;
+
     public function __construct()
     {
         $this->carmas = new ArrayCollection();
@@ -264,7 +269,7 @@ class User implements UserInterface
 
     public function getPassword()
     {
-        // TODO: Implement getPassword() method.
+        return $this->password;
     }
 
     public function getSalt()
@@ -274,12 +279,21 @@ class User implements UserInterface
 
     public function getUsername()
     {
+        if ($this->getType() == 'admin')
+            return $this->getEmail();
         return sprintf('%s@%s', $this->getUid(), $this->getType());
     }
 
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    public function setPassword(?string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
     }
 
 
