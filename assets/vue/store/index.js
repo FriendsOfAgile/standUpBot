@@ -15,17 +15,15 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    userConfigs (state, configs) {
+    standUpConfigs (state, configs) {
       state.standupConfigs = configs;
-      console.log('configs ', state.standupConfigs);
     }
   },
   actions: {
     getStandUpConfigs ({ commit }) {
       return axios.get('/api/configs')
         .then(function (response) {
-          console.log(response);
-          commit('userConfigs', response.data['hydra:member']);
+          commit('standUpConfigs', response.data['hydra:member']);
         })
         .catch(function (error) {
           console.log(error);
