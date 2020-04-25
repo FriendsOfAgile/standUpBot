@@ -1,7 +1,7 @@
 <template>
     <div class="w-full flex flex-col">
         <div class="flex p-6">
-            <h3 class="font-bold text-2xl text-gray-700">Manage Standup</h3>
+            <h3 class="font-bold text-2xl text-gray-700">My standups</h3>
         </div>
         <div class="w-full">
             {{ currentStandUps }}

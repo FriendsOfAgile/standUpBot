@@ -3,7 +3,7 @@
         <router-link to="/">
             <img class="rounded-full" :src="userAvatar" />
         </router-link>
-        <router-link  class="relative" to="/dashboard/standup/" @mouseenter.native="showNavTooltip('manageStandup')" @mouseleave.native="activeTooltip = undefined">
+        <router-link  class="relative" to="/dashboard/standups/" @mouseenter.native="showNavTooltip('manageStandup')" @mouseleave.native="activeTooltip = undefined">
             <font-awesome-icon icon="cogs" class="text-gray-600 text-xl"/>
             <div class="bg-white absolute top-0 nav-item__tooltip text-sm border border-gray-400 rounded p-2" v-if="activeTooltip === 'manageStandup'">{{ navTooltips[activeTooltip] }}</div>
         </router-link>
