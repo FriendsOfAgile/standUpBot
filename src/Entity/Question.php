@@ -4,8 +4,14 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * @ApiResource(
+ *     normalizationContext={"groups"={"question:read"}},
+ *     denormalizationContext={"groups"={"question:write"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\QuestionRepository")
  */
 class Question
@@ -18,21 +24,26 @@ class Question
     private $id;
 
     /**
+     * @Groups({"question:read", "question:write"})
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=500)
      */
     private $text;
 
     /**
+     * @Groups({"question:read", "question:write"})
      * @ORM\Column(type="string", length=100)
      */
-    private $color;
+    private $color = 'gray';
 
     /**
+     * @Groups({"question:read", "question:write"})
      * @ORM\Column(type="integer")
      */
     private $sort;
 
     /**
+     * @Groups({"question:read", "question:write"})
      * @ORM\ManyToOne(targetEntity="App\Entity\StandUpConfig", inversedBy="questions")
      * @ORM\JoinColumn(nullable=false)
      */

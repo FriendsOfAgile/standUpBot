@@ -70,9 +70,17 @@ class CustomApiTestCase extends ApiTestCase
         return $user;
     }
 
-    protected function createConfig(string $name): StandUpConfig
+    protected function createConfig(User $user, string $name): StandUpConfig
     {
+        $standUpConfig = new StandUpConfig();
+        $standUpConfig->setName($name);
 
+        if (!$user->getSpace())
+
+        $em = $this->getEntityManager();
+        $em->persist($standUpConfig);
+        $em->flush();
+        return $standUpConfig;
     }
 
     protected function logIn(User $user, string $password): void

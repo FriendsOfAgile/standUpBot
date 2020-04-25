@@ -8,7 +8,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *          "get"
+ *     },
+ *     itemOperations={}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\StandUpRepository")
  */
 class StandUp

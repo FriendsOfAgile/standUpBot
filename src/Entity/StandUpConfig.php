@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "get",
  *          "post"
  *     },
- *     shortName="config"
+ *     shortName="Config"
  * )
  * @ORM\Entity(repositoryClass="App\Repository\StandUpConfigRepository")
  * @ORM\EntityListeners({"App\Doctrine\StandUpConfigEntityListener"})
