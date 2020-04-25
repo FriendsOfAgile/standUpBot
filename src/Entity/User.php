@@ -13,12 +13,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ApiResource(
  *     itemOperations={
- *          "get",
- *          "put"
+ *          "get"={"security"="is_granted('GET_ITEM', object)"},
+ *          "put"={"security"="is_granted('EDIT', object)"},
+ *          "delete"={"security"="is_granted('DELETE', object)"}
  *     },
  *     collectionOperations={
- *          "get",
- *          "post"={"access_control"="is_granted('ROLE_ADMIN')"}
+ *          "get"
  *     },
  *     normalizationContext={"groups"={"user:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"user:write"}, "swagger_definition_name"="Write"}
@@ -84,6 +84,11 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\StandUp", mappedBy="user", orphanRemoval=true)
      */
     private $standUps;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $password;
 
     public function __construct()
     {
@@ -244,9 +249,11 @@ class User implements UserInterface
 
     public function getType(): string
     {
-        $type = 'admin';
         if ($this->getSpace())
             $type = $this->getSpace()->getType();
+        else {
+            $type = $this->getIsAdmin() ? 'admin' : 'user';
+        }
         return $type;
     }
 
@@ -264,7 +271,7 @@ class User implements UserInterface
 
     public function getPassword()
     {
-        // TODO: Implement getPassword() method.
+        return $this->password;
     }
 
     public function getSalt()
@@ -274,12 +281,21 @@ class User implements UserInterface
 
     public function getUsername()
     {
+        if (in_array($this->getType(), ['user', 'admin']))
+            return $this->getEmail();
         return sprintf('%s@%s', $this->getUid(), $this->getType());
     }
 
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    public function setPassword(?string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
     }
 
 

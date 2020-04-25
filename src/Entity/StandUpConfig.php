@@ -3,13 +3,25 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups"={"config:read"}},
+ *     denormalizationContext={"groups"={"config:write"}},
+ *     collectionOperations={
+ *          "get",
+ *          "post"
+ *     },
+ *     shortName="config"
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\StandUpConfigRepository")
+ * @ORM\EntityListeners({"App\Doctrine\StandUpConfigEntityListener"})
  */
 class StandUpConfig
 {
@@ -33,34 +45,49 @@ class StandUpConfig
     private $author;
 
     /**
+     * @Groups({"config:write", "config:read"})
      * @ORM\Column(type="string", length=500, nullable=true)
      */
     private $messageBefore;
 
     /**
+     * @Groups({"config:write", "config:read"})
      * @ORM\Column(type="string", length=500, nullable=true)
      */
     private $messageAfter;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"config:write", "config:read"})
      * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="config", orphanRemoval=true)
      */
     private $questions;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"config:write", "config:read"})
      * @ORM\OneToOne(targetEntity="App\Entity\Schedule", mappedBy="config", cascade={"persist", "remove"})
      */
     private $schedule;
 
     /**
+     * @Assert\Valid()
+     * @Groups({"config:write", "config:read"})
      * @ORM\OneToMany(targetEntity="App\Entity\Member", mappedBy="config", orphanRemoval=true)
      */
     private $members;
 
     /**
+     * @ApiSubresource()
      * @ORM\OneToMany(targetEntity="App\Entity\StandUp", mappedBy="config", orphanRemoval=true)
      */
     private $standUps;
+
+    /**
+     * @Groups({"config:write", "config:read"})
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name = 'Your standup';
 
     public function __construct()
     {
@@ -228,6 +255,18 @@ class StandUpConfig
                 $standUp->setConfig(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
