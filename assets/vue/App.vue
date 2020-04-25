@@ -55,4 +55,26 @@
         /* .component-fade-leave-active below version 2.1.8 */ {
         opacity: 0;
     }
+
+    .slideRight-leave-active,
+    .slideRight-enter-active {
+        transition: .5s;
+    }
+    .slideRight-enter {
+        transform: translate(10%, 0);
+    }
+    .slideRight-leave-to {
+        transform: translate(-10%, 0);
+    }
+
+    .slideLeft-leave-active,
+    .slideLeft-enter-active {
+        transition: .5s;
+    }
+    .slideLeft-enter {
+        transform: translate(-10%, 0);
+    }
+    .slideLeft-leave-to {
+        transform: translate(10%, 0);
+    }
 </style>
