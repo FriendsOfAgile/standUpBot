@@ -20,6 +20,14 @@
                 this.$store.state.user = window.user;
                 delete(window.user);
             }
+          this.$store.dispatch('getStandUpConfigs', {
+            configs: ['1']
+          });
+
+            this.$nextTick( () => {
+              console.log(this.$store.state.standupConfigs);
+            })
+
         }
     }
 </script>
