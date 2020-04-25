@@ -24,7 +24,8 @@ export default new Vuex.Store({
     getStandUpConfigs ({ commit }) {
       return axios.get('/api/configs')
         .then(function (response) {
-          commit('userConfigs', response.data);
+          console.log(response);
+          commit('userConfigs', response.data['hydra:member']);
         })
         .catch(function (error) {
           console.log(error);
