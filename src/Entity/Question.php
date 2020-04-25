@@ -24,14 +24,14 @@ class Question
     private $id;
 
     /**
-     * @Groups({"question:read", "question:write"})
+     * @Groups({"question:read", "question:write","config:write"})
      * @Assert\NotBlank()
      * @ORM\Column(type="string", length=500)
      */
     private $text;
 
     /**
-     * @Groups({"question:read", "question:write"})
+     * @Groups({"question:read", "question:write", "config:write"})
      * @ORM\Column(type="string", length=100)
      */
     private $color = 'gray';
