@@ -24,15 +24,21 @@ class UserResourceTest extends CustomApiTestCase
     /**
      * @test
      */
-    public function can_get_users_as_signed()
+    public function can_get_only_current_user()
     {
+        for ($i = 0; $i < 3; $i++) {
+            $this->createUser(sprintf('example%d@domain.com', $i));
+        }
+
         $this->createUserAndLogIn('example@domain.com', 'foo');
 
-        $this->client->request('GET', '/api/users', [
-            'json' => []
+        $response = $this->client->request('GET', '/api/users', [
+            'headers' => ['Content-Type' => 'application/json']
         ]);
 
         $this->assertResponseStatusCodeSame(200);
-    }
 
+        $response = json_decode($response->getContent(true), true);
+        $this->assertCount(1, $response['hydra:member']);
+    }
 }

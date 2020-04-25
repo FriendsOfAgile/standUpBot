@@ -13,7 +13,7 @@ use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\Space;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use GuzzleHttp\Client;
+use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class CustomApiTestCase extends ApiTestCase
