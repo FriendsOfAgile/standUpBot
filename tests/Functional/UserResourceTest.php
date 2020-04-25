@@ -31,16 +31,15 @@ class UserResourceTest extends CustomApiTestCase
             $this->createUser(sprintf('example%d@domain.com', $i));
         }
 
-        $this->createUserAndLogIn('example@domain.com', 'foo');
+        $this->createUserAndLogIn('example@domain.com', 'foo', 'user');
 
-        $response = $this->client->request('GET', '/api/users', [
+         $this->client->request('GET', '/api/users', [
             'headers' => ['Content-Type' => 'application/json']
         ]);
 
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseIsSuccessful();
 
-        $response = json_decode($response->getContent(true), true);
-        $this->assertCount(1, $response['hydra:member']);
+        $this->assertJsonContains(['hydra:totalItems' => 1]);
     }
 
     /**

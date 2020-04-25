@@ -11,6 +11,7 @@ namespace App\Test;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\Space;
+use App\Entity\StandUpConfig;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
@@ -67,6 +68,11 @@ class CustomApiTestCase extends ApiTestCase
         $user = $this->createUser($email, $type, $password);
         $this->logIn($user, $password);
         return $user;
+    }
+
+    protected function createConfig(string $name): StandUpConfig
+    {
+
     }
 
     protected function logIn(User $user, string $password): void

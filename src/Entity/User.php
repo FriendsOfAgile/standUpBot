@@ -18,8 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "delete"={"security"="is_granted('DELETE', object)"}
  *     },
  *     collectionOperations={
- *          "get"={"security"="object == user"},
- *          "post"={"security"="is_granted('ROLE_ADMIN')"}
+ *          "get"
  *     },
  *     normalizationContext={"groups"={"user:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"user:write"}, "swagger_definition_name"="Write"}
