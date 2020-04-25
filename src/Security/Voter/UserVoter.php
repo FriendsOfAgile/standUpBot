@@ -5,10 +5,21 @@ namespace App\Security\Voter;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserVoter extends Voter
 {
+    /**
+     * @var Security
+     */
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     protected function supports($attribute, $subject)
     {
         return in_array($attribute, ['GET_ITEM', 'EDIT', 'DELETE'])
@@ -23,7 +34,6 @@ class UserVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
-        /** @var User $user */
         $user = $token->getUser();
 
         if (!$user instanceof UserInterface) {
@@ -33,10 +43,10 @@ class UserVoter extends Voter
         switch ($attribute) {
             case 'GET_ITEM':
             case 'EDIT':
-                return $user->getIsAdmin() || ($user->getId() === $subject->getId());
+                return $this->security->isGranted('ROLE_ADMIN') || ($subject == $user);
                 break;
             case 'DELETE':
-                return $user->getIsAdmin() && $subject->getId() != $user->getId();
+                return $this->security->isGranted('ROLE_ADMIN') && $subject != $user;
                 break;
         }
 
