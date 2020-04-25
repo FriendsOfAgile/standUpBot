@@ -20,6 +20,7 @@ class Question
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"question:read"})
      */
     private $id;
 

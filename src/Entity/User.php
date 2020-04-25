@@ -29,6 +29,7 @@ class User implements UserInterface
 {
     /**
      * @ORM\Id()
+     * @Groups({"user:read"})
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
