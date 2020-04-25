@@ -12,6 +12,9 @@ export default new Vuex.Store({
   getters: {
     getUserData: state => {
       return state.user;
+    },
+    getStandUpConfigs: state => {
+      return state.standupConfigs;
     }
   },
   mutations: {
