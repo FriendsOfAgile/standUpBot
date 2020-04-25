@@ -58,7 +58,7 @@
 
     .slideRight-leave-active,
     .slideRight-enter-active {
-        transition: .5s;
+        transition: .3s;
     }
     .slideRight-enter {
         transform: translate(10%, 0);
@@ -69,7 +69,7 @@
 
     .slideLeft-leave-active,
     .slideLeft-enter-active {
-        transition: .5s;
+        transition: .3s;
     }
     .slideLeft-enter {
         transform: translate(-10%, 0);
