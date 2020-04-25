@@ -17,11 +17,18 @@ export default new Vuex.Store({
   mutations: {
     userConfigs (state, configs) {
       state.standupConfigs = configs;
+      console.log('configs ', state.standupConfigs);
     }
   },
   actions: {
-    getStandUpConfigs ({ commit } , configs) {
-      commit('userConfigs', configs)
+    getStandUpConfigs ({ commit }) {
+      return axios.get('/api/configs')
+        .then(function (response) {
+          commit('userConfigs', response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
     }
   },
   modules: {
