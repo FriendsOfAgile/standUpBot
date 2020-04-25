@@ -46,24 +46,169 @@ class UserResourceTest extends CustomApiTestCase
     /**
      * @test
      */
-    public function cant_access_other_users_directly()
+    public function can_get_current_user_directly()
     {
-        $user1 = $this->createUser('user1@domain.com', 'user', 'foo');
-        $user2 = $this->createUser('user2@domain.com', 'user', 'foo');
+        $user = $this->createUserAndLogIn('user@domain.com', 'foo', 'user');
+        $userIri = $this->findIriBy(User::class, ['id' => $user->getId()]);
+        $this->client->request('GET', $userIri, [
+            'headers' => ['Content-Type' => 'application/json']
+        ]);
+        $this->assertResponseStatusCodeSame(200);
+    }
 
-        $this->logIn($user1, 'foo');
+    /**
+     * @test
+     */
+    public function can_edit_current_user_directly()
+    {
+        $user = $this->createUserAndLogIn('user@domain.com', 'foo', 'user');
+        $userIri = $this->findIriBy(User::class, ['id' => $user->getId()]);
 
-        $user1Iri = $this->findIriBy(User::class, ['id' => $user1->getId()]);
-        $user1Ir2 = $this->findIriBy(User::class, ['id' => $user2->getId()]);
+        $this->client->request('PUT', $userIri, [
+            'json' => [
+                'name' => 'updated'
+            ]
+        ]);
+
+        $this->assertResponseStatusCodeSame(200);
+    }
+
+    /**
+     * @test
+     */
+    public function cant_get_other_users_directly()
+    {
+        $this->createUserAndLogIn('user1@domain.com', 'foo', 'user');
+        $user = $this->createUser('user2@domain.com', 'user', 'foo');
+
+        $userIri = $this->findIriBy(User::class, ['id' => $user->getId()]);
 
 
-        $this->client->request('GET', $user1Iri, [
+        $this->client->request('GET', $userIri, [
+            'headers' => ['Content-Type' => 'application/json']
+        ]);
+
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    /**
+     * @test
+     */
+    public function cant_edit_other_users_directly()
+    {
+        $this->createUserAndLogIn('user1@domain.com', 'foo', 'user');
+        $user = $this->createUser('user2@domain.com', 'user', 'foo');
+
+        $userIri = $this->findIriBy(User::class, ['id' => $user->getId()]);
+
+
+        $this->client->request('PUT', $userIri, [
+            'json' => [
+                'name' => 'updated'
+            ]
+        ]);
+
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    /**
+     * @test
+     */
+    public function cant_delete_users()
+    {
+        $current = $this->createUserAndLogIn('user@domain.com', 'foo', 'user');
+        $user = $this->createUser('user@domain.com', 'user', 'foo');
+
+        $userIri = $this->findIriBy(User::class, ['id' => $user->getId()]);
+
+        $this->client->request('DELETE', $userIri, [
+            'headers' => ['Content-Type' => 'application/json']
+        ]);
+
+        $this->assertResponseStatusCodeSame(403);
+
+        $userIri = $this->findIriBy(User::class, ['id' => $current->getId()]);
+
+        $this->client->request('DELETE', $userIri, [
+            'headers' => ['Content-Type' => 'application/json']
+        ]);
+
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    /**
+     * @test
+     */
+    public function admin_can_get_other_users_directly()
+    {
+        $user = $this->createUser('user@domain.com', 'user', 'foo');
+        $admin = $this->createUser('admin@domain.com', 'admin', 'foo');
+
+        $userIri = $this->findIriBy(User::class, ['id' => $user->getId()]);
+
+        $this->logIn($admin, 'foo');
+
+        $this->client->request('GET', $userIri, [
             'headers' => ['Content-Type' => 'application/json']
         ]);
 
         $this->assertResponseStatusCodeSame(200);
+    }
 
-        $this->client->request('GET', $user1Ir2, [
+    /**
+     * @test
+     */
+    public function admin_can_edit_other_users_directly()
+    {
+        $user = $this->createUser('user@domain.com', 'user', 'foo');
+        $admin = $this->createUser('admin@domain.com', 'admin', 'foo');
+
+        $userIri = $this->findIriBy(User::class, ['id' => $user->getId()]);
+
+        $this->logIn($admin, 'foo');
+
+        $this->client->request('PUT', $userIri, [
+            'json' => [
+                'name' => 'updated'
+            ]
+        ]);
+
+        $this->assertResponseStatusCodeSame(200);
+    }
+
+    /**
+     * @test
+     */
+    public function admin_can_delete_other_users_directly()
+    {
+        $user = $this->createUser('user@domain.com', 'user', 'foo');
+        $this->createUserAndLogIn('admin@domain.com', 'foo', 'admin');
+
+        $userIri = $this->findIriBy(User::class, ['id' => $user->getId()]);
+
+        $this->client->request('DELETE', $userIri, [
+            'headers' => ['Content-Type' => 'application/json']
+        ]);
+
+        $this->assertResponseStatusCodeSame(204);
+
+        $this->client->request('DELETE', $userIri, [
+            'headers' => ['Content-Type' => 'application/json']
+        ]);
+
+        $this->assertResponseStatusCodeSame(404);
+    }
+
+    /**
+     * @test
+     */
+    public function admin_cant_delete_himself()
+    {
+        $admin = $this->createUserAndLogIn('admin@domain.com', 'foo', 'admin');
+
+        $iri = $this->findIriBy(User::class, ['id' => $admin->getId()]);
+
+        $this->client->request('DELETE', $iri, [
             'headers' => ['Content-Type' => 'application/json']
         ]);
 

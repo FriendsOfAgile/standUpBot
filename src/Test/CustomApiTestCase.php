@@ -26,7 +26,8 @@ class CustomApiTestCase extends ApiTestCase
         $user = new User();
         $user->setUid($this->generateUid())
             ->setEmail($email)
-            ->setName(ucfirst($type).' user');
+            ->setName(ucfirst($type).' user')
+            ->setIsAdmin($type == 'admin');
 
 
         if ($type !== 'admin' && $type !== 'user') {
@@ -39,7 +40,6 @@ class CustomApiTestCase extends ApiTestCase
                 ->encodePassword($user, $password);
             $user->setPassword($password);
         }
-
 
         $em = $this->getEntityManager();
         $em->persist($user);

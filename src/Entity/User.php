@@ -13,8 +13,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ApiResource(
  *     itemOperations={
- *          "get"={"access_control"="object == user"},
- *          "put"
+ *          "get"={"access_control"="is_granted('ROLE_ADMIN') or object == user"},
+ *          "put"={"access_control"="is_granted('ROLE_ADMIN') or object == user"},
+ *          "delete"={"access_control"="is_granted('ROLE_ADMIN') and object != user"}
  *     },
  *     collectionOperations={
  *          "get"={"access_control"="object == user"},
