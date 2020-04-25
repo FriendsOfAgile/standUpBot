@@ -10,7 +10,6 @@
                         Active standups: <span class="text-gray-700"> {{ getCurrentStandUps }} </span>
                     </h3>
                 </router-link>
-
             </div>
         </transition>
 
