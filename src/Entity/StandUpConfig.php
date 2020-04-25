@@ -58,6 +58,7 @@ class StandUpConfig
     private $messageAfter;
 
     /**
+     * @ApiSubresource()
      * @Assert\Valid()
      * @Groups({"config:write", "config:read"})
      * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="config", orphanRemoval=true)
