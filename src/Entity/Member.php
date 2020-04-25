@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\MemberRepository")
  */
 class Member
@@ -107,5 +108,10 @@ class Member
         $this->canEdit = $canEdit;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return 'Not implemented';
     }
 }

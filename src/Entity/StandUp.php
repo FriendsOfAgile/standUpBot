@@ -123,4 +123,9 @@ class StandUp
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->getUser()->getName().' ('.$this->getTimestamp()->format('d.m.Y').')';
+    }
 }

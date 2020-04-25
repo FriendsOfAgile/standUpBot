@@ -91,4 +91,9 @@ class Carma
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->getAuthor()->getName();
+    }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Member;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class AuthController extends AbstractController
 {
@@ -60,5 +62,15 @@ class AuthController extends AbstractController
         if ($this->getUser())
             return $this->redirect('/dashboard');
         return $this->redirect('/login');
+    }
+
+    /**
+     * @Route("/api/members", methods={"GET"})
+     */
+    public function members(SerializerInterface $serializer)
+    {
+        $items = $this->getDoctrine()->getRepository(Member::class)->findAll();
+
+        return $this->json($serializer->serialize($items, 'json'));
     }
 }

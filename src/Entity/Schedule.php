@@ -90,4 +90,9 @@ class Schedule
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return 'Not implemented';
+    }
 }
