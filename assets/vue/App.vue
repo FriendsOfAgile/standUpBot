@@ -23,7 +23,6 @@
               return this.$store.dispatch('GET_STANDUP_CONFIGS')
                 .then( () => {
                   this.standupConfigs = this.$store.state.standupConfigs;
-                  //console.log(this.$store.state.standupConfigs);
                 })
             }
         }
