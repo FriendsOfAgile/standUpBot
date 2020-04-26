@@ -42,7 +42,7 @@ class User implements UserInterface
 
     /**
      * @Assert\NotBlank()
-     * @Groups({"user:read", "user:write", "member:read"})
+     * @Groups({"user:read", "user:write", "member:read", "config:read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $email;
@@ -54,13 +54,13 @@ class User implements UserInterface
 
     /**
      * @Assert\NotBlank()
-     * @Groups({"user:read", "user:write", "member:read"})
+     * @Groups({"user:read", "user:write", "member:read", "config:read"})
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @Groups({"user:read", "member:read"})
+     * @Groups({"user:read", "member:read", "config:read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $avatar;

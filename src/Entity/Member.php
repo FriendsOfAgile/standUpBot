@@ -26,32 +26,32 @@ class Member
 
     /**
      * @Groups({"member:write"})
-     * @ORM\ManyToOne(targetEntity="App\Entity\StandUpConfig", inversedBy="members")
+     * @ORM\ManyToOne(targetEntity="App\Entity\StandUpConfig", inversedBy="members", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $config;
 
     /**
-     * @Groups({"member:read"})
+     * @Groups({"member:read", "config:read"})
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     /**
-     * @Groups({"member:read", "member:write"})
+     * @Groups({"member:read", "member:write", "config:read"})
      * @ORM\Column(type="boolean")
      */
     private $canRead = true;
 
     /**
-     * @Groups({"member:read", "member:write"})
+     * @Groups({"member:read", "member:write", "config:read"})
      * @ORM\Column(type="boolean")
      */
     private $canWrite = false;
 
     /**
-     * @Groups({"member:read", "member:write"})
+     * @Groups({"member:read", "member:write", "config:read"})
      * @ORM\Column(type="boolean")
      */
     private $canEdit = false;
