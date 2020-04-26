@@ -2,14 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Member;
-use App\Entity\StandUpConfig;
-use App\Service\SlackService;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class AuthController extends AbstractController
 {
@@ -64,15 +60,5 @@ class AuthController extends AbstractController
         if ($this->getUser())
             return $this->redirect('/dashboard');
         return $this->redirect('/login');
-    }
-
-    /**
-     * @Route("/api/configs/{config}/members", methods={"GET"})
-     */
-    public function members(StandUpConfig $config, SerializerInterface $serializer, SlackService $service)
-    {
-        $service->setAccessToken($config->getSpace()->getToken());
-        $list = $service->getUsers();
-        return $this->json($list);
     }
 }

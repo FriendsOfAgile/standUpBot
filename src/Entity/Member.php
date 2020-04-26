@@ -4,10 +4,16 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     denormalizationContext={"groups"={"member:write"}},
+ *     normalizationContext={"groups"={"member:read"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\MemberRepository")
+ * @ORM\EntityListeners({"App\Doctrine\MemberEntityListener"})
  */
 class Member
 {
@@ -19,31 +25,42 @@ class Member
     private $id;
 
     /**
+     * @Groups({"member:write"})
      * @ORM\ManyToOne(targetEntity="App\Entity\StandUpConfig", inversedBy="members")
      * @ORM\JoinColumn(nullable=false)
      */
     private $config;
 
     /**
+     * @Groups({"member:read"})
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     /**
+     * @Groups({"member:read", "member:write"})
      * @ORM\Column(type="boolean")
      */
-    private $canRead;
+    private $canRead = true;
 
     /**
+     * @Groups({"member:read", "member:write"})
      * @ORM\Column(type="boolean")
      */
-    private $canWrite;
+    private $canWrite = false;
 
     /**
+     * @Groups({"member:read", "member:write"})
      * @ORM\Column(type="boolean")
      */
-    private $canEdit;
+    private $canEdit = false;
+
+    /**
+     * @Groups({"config:write", "member:write"})
+     * @var string
+     */
+    private $uid;
 
     public function getId(): ?int
     {
@@ -110,8 +127,19 @@ class Member
         return $this;
     }
 
+    public function getUid(): ?string
+    {
+        return $this->uid;
+    }
+
+    public function setUid(string $uid): self
+    {
+        $this->uid = $uid;
+        return $this;
+    }
+
     public function __toString()
     {
-        return 'Not implemented';
+        return $this->getUser() ? $this->getUser()->getName() : 'Unknown';
     }
 }

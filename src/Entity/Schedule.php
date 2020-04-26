@@ -158,6 +158,6 @@ class Schedule
 
     public function __toString()
     {
-        return 'Not implemented';
+        return '/api/schedules/'.$this->getId();
     }
 }

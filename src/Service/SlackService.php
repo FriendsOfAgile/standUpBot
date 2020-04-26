@@ -71,6 +71,26 @@ class SlackService
         return $result;
     }
 
+    public function getUser(string $uid): ?array
+    {
+        $response = $this->get('users.info', array(
+            'user' => $uid
+        ));
+        if (!$response['ok'])
+            return null;
+        $result = null;
+        if ($member = $response['user']) {
+            $result = array(
+                'uid' => $member['id'],
+                'name' => $member['real_name'],
+                'timeZone' => $member['tz'],
+                'email' => $member['profile']['email'],
+                'avatar' => $member['profile']['image_48']
+            );
+        }
+        return $result;
+    }
+
     protected function request(string $endpoint, string $method = 'GET', array $data = array()): ?array
     {
         if (!$this->accessToken)
