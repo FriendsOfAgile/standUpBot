@@ -33,6 +33,11 @@ class StandUpDelay
      */
     private $sendAfter;
 
+    public function __construct(int $minutes = 30)
+    {
+        $this->sendAfter = (new \DateTime())->modify(sprintf('+%d minutes', $minutes));
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -19,6 +19,7 @@ class Member
 {
     /**
      * @ORM\Id()
+     * @Groups({"member:read"})
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9b5e743407420b225243b169e62b1c1",
+    "content-hash": "35aa4d6466cb0d2510538ed0a6d94d16",
     "packages": [
         {
             "name": "adam-paterson/oauth2-slack",
@@ -711,16 +711,16 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "2.0.7",
+            "version": "2.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "6926771140ee87a823c3b2c72602de9dda4490d3"
+                "reference": "b0e0deb6e700438401ede433a15a6372d2285202"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/6926771140ee87a823c3b2c72602de9dda4490d3",
-                "reference": "6926771140ee87a823c3b2c72602de9dda4490d3",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/b0e0deb6e700438401ede433a15a6372d2285202",
+                "reference": "b0e0deb6e700438401ede433a15a6372d2285202",
                 "shasum": ""
             },
             "require": {
@@ -799,7 +799,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2020-01-18T11:56:15+00:00"
+            "time": "2020-04-23T10:52:09+00:00"
         },
         {
             "name": "doctrine/doctrine-migrations-bundle",
@@ -1459,16 +1459,16 @@
         },
         {
             "name": "easycorp/easyadmin-bundle",
-            "version": "v2.3.6",
+            "version": "v2.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EasyCorp/EasyAdminBundle.git",
-                "reference": "60e30c341d0f33ee30931c93cc2a74dee2d9eb5e"
+                "reference": "61625643a171bfe63f76fcbabf8179effc72cc6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/60e30c341d0f33ee30931c93cc2a74dee2d9eb5e",
-                "reference": "60e30c341d0f33ee30931c93cc2a74dee2d9eb5e",
+                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/61625643a171bfe63f76fcbabf8179effc72cc6a",
+                "reference": "61625643a171bfe63f76fcbabf8179effc72cc6a",
                 "shasum": ""
             },
             "require": {
@@ -1540,7 +1540,7 @@
                 "backend",
                 "generator"
             ],
-            "time": "2020-04-19T14:14:32+00:00"
+            "time": "2020-04-24T18:12:45+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -8422,6 +8422,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
+        "ext-json": "*",
         "php": "^7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*"

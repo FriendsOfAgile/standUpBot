@@ -28,6 +28,7 @@ class Schedule
 
     /**
      * @ORM\Id()
+     * @Groups({"schedule:read"})
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */

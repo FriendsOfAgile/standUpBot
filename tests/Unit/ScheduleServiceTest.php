@@ -67,7 +67,6 @@ class ScheduleServiceTest extends KernelTestCase
      */
     public function testIsTimeToStandUp(\DateTime $dateTime, $expected)
     {
-        dump($dateTime);
         $space = new Space();
         $space->setName('Unit Test')
             ->setType('slack');
