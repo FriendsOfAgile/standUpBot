@@ -48,12 +48,14 @@ class StandUpConfigEntityListener
             if (!$object->getSpace() && $user->getSpace())
                 $object->setSpace($user->getSpace());
 
-            $member = new Member();
-            $member->setUser($user)
-                ->setCanWrite(true)
-                ->setCanRead(true)
-                ->setCanEdit(true)
-                ->setConfig($object);
+            if ($object->getMembers()->count() <= 0) {
+                $member = new Member();
+                $member->setUser($user)
+                    ->setCanWrite(true)
+                    ->setCanRead(true)
+                    ->setCanEdit(true)
+                    ->setConfig($object);
+            }
         }
     }
 }

@@ -94,12 +94,12 @@ class Schedule
         return $this;
     }
 
-    public function getDaysOfTheWeek(): ?array
+    protected function getDaysOfTheWeek(): ?array
     {
         return $this->daysOfTheWeek;
     }
 
-    public function setDaysOfTheWeek(?array $daysOfTheWeek): self
+    protected function setDaysOfTheWeek(?array $daysOfTheWeek): self
     {
         $this->daysOfTheWeek = $daysOfTheWeek;
 

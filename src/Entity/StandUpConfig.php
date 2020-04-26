@@ -275,6 +275,6 @@ class StandUpConfig
 
     public function __toString()
     {
-        return $this->getName() ?? 'Unnamed';
+        return $this->getId().'. '.$this->getName() ?? 'Unnamed';
     }
 }

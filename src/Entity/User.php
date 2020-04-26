@@ -284,7 +284,7 @@ class User implements UserInterface
     {
         if (in_array($this->getType(), ['user', 'admin']))
             return $this->getEmail();
-        return sprintf('%s@%s', $this->getUid(), $this->getType());
+        return sprintf('%s@%s (%s)', $this->getUid(), $this->getType(), $this->getName());
     }
 
     public function eraseCredentials()
