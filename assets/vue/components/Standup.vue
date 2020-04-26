@@ -13,7 +13,7 @@
                 </label>
             </div>
             <div class="flex flex-col p-1 mt-2">
-                <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-2 border-accentColor w-content">Questions</h3>
+                <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-accentColor w-content">Questions</h3>
                 <div class="flex flex-col ">
                     <div class="w-full flex-flex-col" v-for="question in standUpData.questions">
                         <div class="border-l-4 py-1 px-2 ml-4 mt-4 " :style="{'border-color': question.color}">
