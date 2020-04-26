@@ -48,6 +48,29 @@ class SlackService
         return $this->get('team.info', $options);
     }
 
+    /**
+     * @return array|null
+     */
+    public function getUsers(): ?array
+    {
+        $response = $this->get('users.list');
+        if (!$response['ok'])
+            return null;
+        $result = array();
+        foreach($response['members'] as $member) {
+            if($member['name'] == 'slackbot' || $member['deleted'] || $member['is_bot'])
+                continue;
+            $result[] = array(
+                'uid' => $member['id'],
+                'name' => $member['real_name'],
+                'timeZone' => $member['tz'],
+                'email' => $member['profile']['email'],
+                'avatar' => $member['profile']['image_48']
+            );
+        }
+        return $result;
+    }
+
     protected function request(string $endpoint, string $method = 'GET', array $data = array()): ?array
     {
         if (!$this->accessToken)

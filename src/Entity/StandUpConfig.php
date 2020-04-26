@@ -78,6 +78,7 @@ class StandUpConfig
     private $schedule;
 
     /**
+     * @ApiSubresource()
      * @Assert\Valid()
      * @Groups({"config:write", "config:read"})
      * @ORM\OneToMany(targetEntity="App\Entity\Member", mappedBy="config", orphanRemoval=true)
