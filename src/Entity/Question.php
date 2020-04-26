@@ -20,7 +20,6 @@ class Question
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"question:read"})
      */
     private $id;
 
@@ -41,7 +40,7 @@ class Question
      * @Groups({"question:read", "question:write"})
      * @ORM\Column(type="integer")
      */
-    private $sort;
+    private $sort = 0;
 
     /**
      * @Groups({"question:read", "question:write"})

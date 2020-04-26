@@ -9,6 +9,7 @@
 namespace App\Doctrine;
 
 
+use App\Entity\Schedule;
 use App\Entity\StandUpConfig;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Security;
@@ -27,6 +28,11 @@ class StandUpConfigEntityListener
      */
     public function prePersist($object)
     {
+        if (!$object->getSchedule()) {
+            $schedule = new Schedule();
+            $object->setSchedule($schedule);
+        }
+
         if ($object->getAuthor())
             return;
 
