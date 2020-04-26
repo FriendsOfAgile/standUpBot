@@ -18,6 +18,7 @@ class Question
 {
     /**
      * @ORM\Id()
+     * @Groups({"question:read"})
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */

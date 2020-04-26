@@ -2,7 +2,9 @@
 
 namespace App\Command;
 
+use App\Entity\Question;
 use App\Entity\Space;
+use App\Entity\StandUpDelay;
 use App\Service\ScheduleService;
 use App\Service\SlackService;
 use App\Traits\LoggerTrait;
@@ -59,13 +61,20 @@ class StandUpCommand extends Command
                     $io->text(sprintf('Found %d users to stand-up', count($users)));
                     foreach ($users as $user) {
                         if ($io->ask(sprintf('Do you want to send message to %s', $user->getName()), 'yes') == 'yes') {
+                            //Отправляем welcome
                             if ($config->getMessageBefore())
                                 $this->slack->postMessage($user, $config->getMessageBefore());
-
+                            //Отправляем первый вопрос
+                            /** @var Question $question */
+                            if($question = $config->getQuestions()->first())
+                                $this->slack->postMessage($user, $question);
+                            //Заносим в Delay-лист
+                            $delay = new StandUpDelay();
+                            $delay->setConfig($config)
+                                ->setUser($user);
+                            $this->em->persist($delay);
+                            $this->em->flush();
                         }
-                        //Отправляем welcome
-                        //Отправляем первый вопрос
-                        //Заносим в Delay-лист
                     }
                 }
             }

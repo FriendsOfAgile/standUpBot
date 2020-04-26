@@ -55,10 +55,9 @@ class ScheduleService
             foreach ($members as $member) {
                 if (!$member->getUser() || !$member->getCanWrite())
                     continue;
-                if (!$this->userHasStandUpToday($member->getUser()))
+                if (!$this->isUserDelayed($member->getUser()) && !$this->userHasStandUpToday($member->getUser()))
                     $result[] = $member->getUser();
-                elseif ($this->timeToSendDelayed($member->getUser()))
-                    $result[] = $member->getUser();
+
             }
         }
         return $result;
@@ -85,27 +84,30 @@ class ScheduleService
         return (bool)$result;
     }
 
-    public function timeToSendDelayed(User $user): bool
+    public function isUserDelayed(User $user): bool
     {
         /** @var StandUpDelayRepository $repository */
         $repository = $this->em->getRepository(StandUpDelay::class);
+        $queryBuilder = $repository->createQueryBuilder('d');
 
-        $after = (new \DateTime())->format('Y-m-d H:i:s');
+        $now = new \DateTime();
 
-        $queryBuilder = $repository->createQueryBuilder('d')
-            ->where('d.user = :user')
+        $queryBuilder->where($queryBuilder->expr()->between('d.sendAfter', ':date_from', ':date_to'))
+            ->andWhere('d.user = :user')
             ->andWhere('d.config = :config')
-            ->andWhere('d.sendAfter >= :after')
+            ->andWhere('d.sendAfter > :after')
             ->setParameters(array(
                 'user' => $user,
-                'config' => $this->config,
-                'after' => $after
+                'date_from' =>  (new \DateTime())->format('Y-m-d 00:00:00'),
+                'date_to' => (new \DateTime())->format('Y-m-d 23:59:59'),
+                'after' => $now->format('Y-m-d H:i:s'),
+                'config' => $this->config
             ));
-        $queryBuilder->andWhere($queryBuilder->expr()->between('d.sendAfter', ':date_from', ':date_to'));
-        $queryBuilder->setParameter('date_from', (new \DateTime())->format('Y-m-d 00:00:00'));
-        $queryBuilder->setParameter('date_to', (new \DateTime())->format('Y-m-d 23:59:59'));
 
-        return (bool)$queryBuilder->getQuery()->getOneOrNullResult();
+
+        $r = $queryBuilder->getQuery()->getResult();
+
+        return (bool)$r;
     }
 
     /**

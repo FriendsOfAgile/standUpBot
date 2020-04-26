@@ -99,7 +99,7 @@ class SlackService
 
     public function postMessage(User $user, string $message): bool
     {
-        $response = $this->get('users.info', array(
+        $response = $this->get('chat.postMessage', array(
             'channel' => $user->getUid(),
             'text' => $message
         ));
@@ -131,15 +131,12 @@ class SlackService
             );
         }
 
-
         if ($data != null && $method == 'POST')
             $options['json'] = $data;
         elseif ($data != null && $method == 'GET')
             $options['query'] = $data;
 
-
         $response = $client->request($method, $endpoint, $options);
-        dump($response->getBody()->getContents());
         $response = json_decode($response->getBody()->getContents(), true);
         if (!is_array($response) || $response['ok'] === false)
             return null;

@@ -27,6 +27,7 @@ class StandUpConfig
 {
     /**
      * @ORM\Id()
+     * @Groups({"config:read"})
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
