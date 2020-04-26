@@ -9,6 +9,7 @@
                     <h3 class="font-bold text-xxl pb-4">{{ standup.name }}</h3>
                     <div class="text-gray-500">Intro message: <span class="text-gray-800">{{ standup.messageBefore }}</span></div>
                     <div class="text-gray-500">Outro message: <span class="text-gray-800">{{ standup.messageAfter }}</span></div>
+                    <div class="text-gray-500">Questions: <span class="text-gray-800">{{ standup.questions.length }}</span></div>
                     <div class="text-gray-500">Members: <span class="text-gray-800">{{ standup.members.length }}</span></div>
                 </router-link>
             </div>

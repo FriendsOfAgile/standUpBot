@@ -27,7 +27,7 @@ Vue.use(VueRouter)
   {
     path: '/dashboard/standups/:id',
     name: 'Standup',
-    component: Standup
+    component: Standup,
   },
   {
     path: '/dashboard/reports/',

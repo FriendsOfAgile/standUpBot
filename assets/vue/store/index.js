@@ -15,6 +15,9 @@ export default new Vuex.Store({
     },
     getStandUpConfigs: state => {
       return state.standupConfigs;
+    },
+    getStandUpConfigData: (state) => (id)  => {
+      return state.standupConfigs.find(config => config.id === id);
     }
   },
   mutations: {
@@ -23,7 +26,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    getStandUpConfigs ({ commit }) {
+    GET_STANDUP_CONFIGS ({ commit }) {
       return axios.get('/api/configs')
         .then(function (response) {
           commit('standUpConfigs', response.data['hydra:member']);
