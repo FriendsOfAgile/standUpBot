@@ -12,11 +12,11 @@
                     <input id="afterMessage" class="w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" type="text" v-model="standUpData.messageAfter">
                 </label>
             </div>
-            <div class="flex flex-col p-1 mt-4">
-                <h3 class="text-lg font-bold text-gray-700 border-b-4 border-accentColor w-content">Questions</h3>
-                <div class="flex flex-col pt-2">
-                    <div class="w-full flex-flex-col mt-2" v-for="question in standUpData.questions">
-                        <div class="py-2 border-l-4 p-2" :style="{'border-color': question.color}">
+            <div class="flex flex-col p-1 mt-2">
+                <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-2 border-accentColor w-content">Questions</h3>
+                <div class="flex flex-col ">
+                    <div class="w-full flex-flex-col" v-for="question in standUpData.questions">
+                        <div class="border-l-4 py-1 px-2 ml-4 mt-4 " :style="{'border-color': question.color}">
                             {{ question.text }}
                         </div>
                     </div>
