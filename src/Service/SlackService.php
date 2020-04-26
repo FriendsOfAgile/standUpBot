@@ -9,6 +9,7 @@
 namespace App\Service;
 
 
+use App\Entity\User;
 use App\Traits\LoggerTrait;
 use GuzzleHttp\Client;
 
@@ -71,6 +72,10 @@ class SlackService
         return $result;
     }
 
+    /**
+     * @param string $uid
+     * @return array|null
+     */
     public function getUser(string $uid): ?array
     {
         $response = $this->get('users.info', array(
@@ -79,6 +84,7 @@ class SlackService
         if (!$response['ok'])
             return null;
         $result = null;
+
         if ($member = $response['user']) {
             $result = array(
                 'uid' => $member['id'],
@@ -89,6 +95,15 @@ class SlackService
             );
         }
         return $result;
+    }
+
+    public function postMessage(User $user, string $message): bool
+    {
+        $response = $this->get('users.info', array(
+            'channel' => $user->getUid(),
+            'text' => $message
+        ));
+        return $response['ok'] ?? false;
     }
 
     protected function request(string $endpoint, string $method = 'GET', array $data = array()): ?array
@@ -102,19 +117,29 @@ class SlackService
             'base_uri' => self::BASE_URL,
         ));
 
-        $options = array(
-            'headers' => array(
-                'Content-Type' => 'application/x-www-form-urlencoded'
-            )
-        );
+        if ($method == 'POST') {
+            $options = array(
+                'headers' => array(
+                    'Content-Type' => 'application/json'
+                )
+            );
+        } else {
+            $options = array(
+                'headers' => array(
+                    'Content-Type' => 'application/x-www-form-urlencoded'
+                )
+            );
+        }
+
 
         if ($data != null && $method == 'POST')
-            $options['form_params'] = $data;
+            $options['json'] = $data;
         elseif ($data != null && $method == 'GET')
             $options['query'] = $data;
 
 
         $response = $client->request($method, $endpoint, $options);
+        dump($response->getBody()->getContents());
         $response = json_decode($response->getBody()->getContents(), true);
         if (!is_array($response) || $response['ok'] === false)
             return null;

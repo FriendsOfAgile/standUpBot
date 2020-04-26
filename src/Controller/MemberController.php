@@ -27,4 +27,34 @@ class MemberController extends AbstractController
         $list = $service->getUsers();
         return $this->json($list);
     }
+
+    /**
+     * @Route("/test")
+     * @param StandUpConfigRepository $repository
+     * @param ScheduleService $service
+     */
+    public function test(StandUpConfigRepository $repository, ScheduleService $service)
+    {
+        $list = $repository->findAll();
+        /** @var StandUpConfig $config */
+        $config = end($list);
+
+        $config->getSchedule()->setWeekSchedule(array(
+            'monday' => true,
+            'tuesday' => true,
+            'wednesday' => true,
+            'thursday' => true,
+            'friday' => true,
+            'saturday' => true,
+            'sunday' => true
+        ));
+
+        $service->setConfig($config);
+        dump($config->getId());
+        dump($service->isDayToStandUp());
+        dump($service->isTimeToStandUp());
+        dump($service->getUsersToStandUp());
+
+        die;
+    }
 }
