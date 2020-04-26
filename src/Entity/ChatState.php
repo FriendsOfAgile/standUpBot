@@ -37,6 +37,17 @@ class ChatState
      */
     private $timestamp;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\StandUpConfig")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $config;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\StandUp")
+     */
+    private $standup;
+
     public function __construct()
     {
         $this->timestamp = new \DateTime();
@@ -91,6 +102,30 @@ class ChatState
     public function setTimestamp(\DateTimeInterface $timestamp): self
     {
         $this->timestamp = $timestamp;
+
+        return $this;
+    }
+
+    public function getConfig(): ?StandUpConfig
+    {
+        return $this->config;
+    }
+
+    public function setConfig(?StandUpConfig $config): self
+    {
+        $this->config = $config;
+
+        return $this;
+    }
+
+    public function getStandup(): ?StandUp
+    {
+        return $this->standup;
+    }
+
+    public function setStandup(?StandUp $standup): self
+    {
+        $this->standup = $standup;
 
         return $this;
     }

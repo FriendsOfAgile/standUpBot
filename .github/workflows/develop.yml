@@ -72,5 +72,4 @@ jobs:
           script: |
             cd /home/${{ secrets.USERNAME }}/web/${{ secrets.HOST }}/public_html/
             cp ../.env ./.env
-            php bin/console doctrine:schema:drop --force --full-database --quiet --no-interaction || true
-            php bin/console doctrine:schema:create --quiet --no-interaction
+            php bin/console doctrine:schema:update --force --quiet --no-interaction
