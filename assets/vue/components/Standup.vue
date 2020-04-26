@@ -1,16 +1,30 @@
 <template>
     <div class="w-full flex flex-col">
-        <div class="flex p-6">
+        <div class="flex px-6 pt-6">
             <h3 class="font-bold text-2xl text-gray-700">Standup {{ standUpData.name }}</h3>
         </div>
-        <div class="flex flex-col p-6 space-y-4">
-            <label for="beforeMessage" class="text-gray-500">Intro message:
-                <input id="beforeMessage" class="w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" autofocus type="text" v-model="standUpData.messageBefore">
-            </label>
-            <label for="afterMessage" class="text-gray-500">Outro message:
-                <input id="afterMessage" class="w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" type="text" v-model="standUpData.messageAfter">
-            </label>
+        <div class="flex flex-col p-6">
+            <div class="flex flex-col space-y-4">
+                <label for="beforeMessage" class="text-gray-500">Intro message:
+                    <input id="beforeMessage" class="w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" autofocus type="text" v-model="standUpData.messageBefore">
+                </label>
+                <label for="afterMessage" class="text-gray-500">Outro message:
+                    <input id="afterMessage" class="w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" type="text" v-model="standUpData.messageAfter">
+                </label>
+            </div>
+            <div class="flex flex-col p-1 mt-4">
+                <h3 class="text-lg font-bold text-gray-700 border-b-4 border-accentColor w-content">Questions</h3>
+                <div class="flex flex-col pt-2">
+                    <div class="w-full flex-flex-col mt-2" v-for="question in standUpData.questions">
+                        <div class="py-2 border-l-4 p-2" :style="{'border-color': question.color}">
+                            {{ question.text }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
+
     </div>
 </template>
 

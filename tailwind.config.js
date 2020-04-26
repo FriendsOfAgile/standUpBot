@@ -4,6 +4,12 @@ module.exports = {
       height: {
         fullVh: '100vh',
       },
+      width: {
+        content: 'max-content'
+      },
+      colors:  {
+        accentColor: '#7e91ff'
+      }
     },
   },
   variants: {},
