@@ -9,9 +9,11 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCogs } from '@fortawesome/free-solid-svg-icons'
 import { faChartPie } from '@fortawesome/free-solid-svg-icons'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faCogs)
 library.add(faChartPie)
+library.add(faEdit)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

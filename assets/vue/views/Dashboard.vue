@@ -7,7 +7,7 @@
             <div class="w-full mt-6" v-if="getCurrentStandUps">
                 <router-link to="/dashboard/standups">
                     <h3 class="text-xl text-gray-500">
-                        Active standups: <span class="text-gray-700"> {{ getCurrentStandUps }} </span>
+                       Standup configs: <span class="text-gray-700"> {{ getCurrentStandUps }} </span>
                     </h3>
                 </router-link>
             </div>
