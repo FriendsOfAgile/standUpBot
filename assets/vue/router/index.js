@@ -2,9 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
-import ManageStandup from "../views/MyStandups.vue";
+import ManageStandups from "../views/ManageStandups.vue";
+import Standup from "../components/Standup.vue";
 import Reports from "../views/Reports.vue";
-import MyStandups from "../views/MyStandups";
 
 Vue.use(VueRouter)
 
@@ -21,8 +21,13 @@ Vue.use(VueRouter)
   },
   {
     path: '/dashboard/standups/',
-    name: 'MyStandups',
-    component: MyStandups
+    name: 'ManageStandups',
+    component: ManageStandups
+  },
+  {
+    path: '/dashboard/standups/:id',
+    name: 'Standup',
+    component: Standup
   },
   {
     path: '/dashboard/reports/',
