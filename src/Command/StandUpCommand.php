@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\ChatState;
 use App\Entity\Question;
 use App\Entity\Space;
 use App\Entity\StandUpDelay;
@@ -72,6 +73,13 @@ class StandUpCommand extends Command
                             $delay = new StandUpDelay();
                             $delay->setConfig($config)
                                 ->setUser($user);
+
+                            $state = new ChatState();
+                            $state->setUser($user)
+                                ->setQuestion($question->getText())
+                                ->setNextQuestion($config->getQuestions()->next());
+
+                            $this->em->persist($state);
                             $this->em->persist($delay);
                             $this->em->flush();
                         }
