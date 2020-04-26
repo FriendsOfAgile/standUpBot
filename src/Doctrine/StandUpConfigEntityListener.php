@@ -9,17 +9,23 @@
 namespace App\Doctrine;
 
 
+use App\Entity\Member;
+use App\Entity\Schedule;
 use App\Entity\StandUpConfig;
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
 class StandUpConfigEntityListener
 {
     private $security;
 
-    public function __construct(Security $security)
+    private $entityManager;
+
+    public function __construct(Security $security, EntityManagerInterface $entityManager)
     {
         $this->security = $security;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -27,6 +33,11 @@ class StandUpConfigEntityListener
      */
     public function prePersist($object)
     {
+        if (!$object->getSchedule()) {
+            $schedule = new Schedule();
+            $object->setSchedule($schedule);
+        }
+
         if ($object->getAuthor())
             return;
 
@@ -36,6 +47,15 @@ class StandUpConfigEntityListener
 
             if (!$object->getSpace() && $user->getSpace())
                 $object->setSpace($user->getSpace());
+
+            if ($object->getMembers()->count() <= 0) {
+                $member = new Member();
+                $member->setUser($user)
+                    ->setCanWrite(true)
+                    ->setCanRead(true)
+                    ->setCanEdit(true)
+                    ->setConfig($object);
+            }
         }
     }
 }

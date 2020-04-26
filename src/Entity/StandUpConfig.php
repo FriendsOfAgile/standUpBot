@@ -27,11 +27,16 @@ class StandUpConfig
 {
     /**
      * @ORM\Id()
-     * @Groups({"config:read"})
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @Groups({"config:write", "config:read"})
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name = 'Your StandUp';
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Space", inversedBy="standUpConfigs")
@@ -61,7 +66,7 @@ class StandUpConfig
      * @ApiSubresource()
      * @Assert\Valid()
      * @Groups({"config:write", "config:read"})
-     * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="config", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="config", orphanRemoval=true, cascade={"persist"})
      */
     private $questions;
 
@@ -73,6 +78,7 @@ class StandUpConfig
     private $schedule;
 
     /**
+     * @ApiSubresource()
      * @Assert\Valid()
      * @Groups({"config:write", "config:read"})
      * @ORM\OneToMany(targetEntity="App\Entity\Member", mappedBy="config", orphanRemoval=true)
@@ -84,12 +90,6 @@ class StandUpConfig
      * @ORM\OneToMany(targetEntity="App\Entity\StandUp", mappedBy="config", orphanRemoval=true)
      */
     private $standUps;
-
-    /**
-     * @Groups({"config:write", "config:read"})
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $name = 'Your standup';
 
     public function __construct()
     {
@@ -275,6 +275,6 @@ class StandUpConfig
 
     public function __toString()
     {
-        return $this->getName() ?? 'Unnamed';
+        return $this->getId().'. '.$this->getName() ?? 'Unnamed';
     }
 }

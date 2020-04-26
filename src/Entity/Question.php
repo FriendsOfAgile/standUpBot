@@ -20,28 +20,27 @@ class Question
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"question:read"})
      */
     private $id;
 
     /**
-     * @Groups({"question:read", "question:write","config:write"})
+     * @Groups({"question:read", "question:write","config:write", "config:read"})
      * @Assert\NotBlank()
      * @ORM\Column(type="string", length=500)
      */
     private $text;
 
     /**
-     * @Groups({"question:read", "question:write", "config:write"})
+     * @Groups({"question:read", "question:write", "config:write", "config:read"})
      * @ORM\Column(type="string", length=100)
      */
     private $color = 'gray';
 
     /**
-     * @Groups({"question:read", "question:write"})
+     * @Groups({"question:read", "question:write", "config:read"})
      * @ORM\Column(type="integer")
      */
-    private $sort;
+    private $sort = 0;
 
     /**
      * @Groups({"question:read", "question:write"})

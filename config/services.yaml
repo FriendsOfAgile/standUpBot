@@ -33,3 +33,5 @@ services:
 
     App\Doctrine\StandUpConfigEntityListener:
         tags: ['doctrine.orm.entity_listener']
+    App\Doctrine\MemberEntityListener:
+        tags: ['doctrine.orm.entity_listener']
