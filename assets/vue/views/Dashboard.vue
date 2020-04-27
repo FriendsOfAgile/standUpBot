@@ -1,10 +1,10 @@
 <template>
-    <div class="w-full flex p-6 flex-col">
-        <div class="flex">
+    <div class="w-full flex flex-col">
+        <div class="flex px-6 pt-6">
             <h3 class="font-bold text-2xl text-gray-700">Dashboard</h3>
         </div>
         <transition name="slideRight" mode="out-in">
-            <div class="w-full mt-6" v-if="getCurrentStandUps">
+            <div class="w-full p-6" v-if="getCurrentStandUps">
                 <router-link to="/dashboard/standups">
                     <h3 class="text-xl text-gray-500">
                        Standup configs: <span class="text-gray-700"> {{ getCurrentStandUps }} </span>
