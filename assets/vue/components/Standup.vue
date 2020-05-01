@@ -32,7 +32,7 @@
                                 <div style="width: 24px; height: 24px;" :style="{'background-color': question.color}" class="rounded cursor-pointer" @click="showColorPicker = index"></div>
                                 <transition name="fade">
                                     <div class="color-picker-container p-2 z-max" v-if="showColorPicker === index" @mouseleave="showColorPicker = false">
-                                        <v-swatches v-model="question.color" @input="compareConfig, showColorPicker = false" popover-y="up" inline="true"/>
+                                        <v-swatches v-model="question.color" @input="compareConfig(), showColorPicker = false" popover-y="up" inline="true"/>
                                     </div>
                                 </transition>
 
