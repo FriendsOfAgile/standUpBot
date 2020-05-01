@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import VueLodash from 'vue-lodash'
+import lodash from 'lodash'
 import tailwind from 'tailwindcss'
 import '../css/tailwind.css'
 
@@ -20,6 +22,8 @@ library.add(faCheck)
 library.add(faSave)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+
+Vue.use(VueLodash, {lodash:lodash})
 
 Vue.config.productionTip = false
 
