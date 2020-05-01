@@ -105,6 +105,7 @@
           this.standUpData.questions.push(question);
           this.compareConfig();
           this.newQuestion.text = "";
+          this.newQuestion.color = "#dddddd";
           this.showNewQuestionInput = false;
         }
       },
