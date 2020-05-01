@@ -40,13 +40,15 @@
                             </div>
                         </div>
                     <transition name="component-fade" mode="out-in">
-                        <div class="border-l-4 ml-4 mt-4 w-full flex items-center" :style="{'border-color': newQuestion.color}" v-if="showNewQuestionInput" @keyup.enter="addQuestionToConfig">
+                        <div class="border-l-4 ml-4 mt-4 w-full flex items-center relative" :style="{'border-color': newQuestion.color}" v-if="showNewQuestionInput" @keyup.enter="addQuestionToConfig">
                             <input class="ml-1 py-1 px-2 focus:outline-none" placeholder="Enter your question" ref="newQuestion" v-model="newQuestion.text" type="text" @input="compareConfig"/>
-                            <input type="color" v-model="newQuestion.color">
+                            <div style="width: 24px; height: 24px;" :style="{'background-color': newQuestion.color}" class="rounded cursor-pointer" @click="showColorPicker = 'newQuestion'"></div>
+                            <div class="color-picker-container p-2 z-max" v-if="showColorPicker === 'newQuestion'" @mouseleave="showColorPicker = false">
+                                <v-swatches v-model="newQuestion.color" @input="showColorPicker = false" popover-y="up" inline="true"/>
+                            </div>
                             <transition name="component-fade">
                                 <span class="text-accentColor text-xs ml-4 mt-1 cursor-pointer" v-if="newQuestion.text.length" @click="addQuestionToConfig">save</span>
                             </transition>
-
                         </div>
                     </transition>
                     <div class="flex full mt-6 text-gray-700 items-center cursor-pointer" @click="focusNewQuestionInput">
