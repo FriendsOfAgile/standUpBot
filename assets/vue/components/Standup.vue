@@ -2,7 +2,7 @@
     <div class="w-full flex flex-col">
         <div class="flex justify-between px-6 pt-6">
             <h3 class="font-bold text-2xl text-gray-700">Standup {{ standUpData.name }}</h3>
-            <button class="bg-white text-white border-2 border-gray-500 font-bold py-2 px-4 rounded" :class="[!edited ? 'cursor-not-allowed' : '', !edited ? 'opacity-50' : '', !edited ? 'text-gray-500' : '', edited ? 'bg-accentColor' : '', edited ? 'border-accentColor' : '' ]">
+            <button class="bg-white text-white border-2 border-gray-500 font-bold py-2 px-4 rounded focus:outline-none" :class="[!edited ? 'cursor-not-allowed' : '', !edited ? 'opacity-50' : '', !edited ? 'text-gray-500' : '', edited ? 'bg-accentColor' : '', edited ? 'border-accentColor' : '' ]">
                 <span v-if="!edited">
                     <font-awesome-icon icon="check" class="mr-1"/>
                     Config saved
@@ -25,20 +25,24 @@
             <div class="flex flex-col p-1 mt-2">
                 <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-accentColor w-content">Questions</h3>
                 <div class="flex flex-col ">
-                    <div class="w-full flex-flex-col" v-for="question in standUpData.questions" :key="question.id">
-                        <div class="border-l-4 ml-4 mt-4 w-full flex items-center" :style="{'border-color': question.color}">
-                            <input class="ml-1 py-1 px-2 focus:outline-none" type="text" v-model="question.text" @input="compareConfig"/>
-                            <input type="color" v-model="question.color" @change="compareConfig">
+                        <div class="w-full flex-flex-col" v-for="(question, index) in standUpData.questions" :key="question['@id']">
+                            <div class="border-l-4 ml-4 mt-4 w-full flex items-center" :style="{'border-color': question.color}">
+                                <input class="ml-1 py-1 px-2 focus:outline-none" type="text" v-model="question.text" @input="compareConfig"/>
+                                <input type="color" v-model="question.color" @change="compareConfig">
+                                <span class="text-red-600 text-xs ml-4 mt-1 cursor-pointer" @click="deleteQuestion(index)">delete</span>
+                            </div>
                         </div>
-                    </div>
-                    <transition name="component-fade">
-                        <div class="border-l-4 ml-4 mt-4 w-full flex items-center" :style="{'border-color': newQuestion.color}" v-if="showNewQuestionInput">
-                            <input class="ml-1 py-1 px-2 focus:outline-none" placeholder="Enter your question" v-model="newQuestion.text" type="text" @input="compareConfig"/>
-                            <input type="color" v-model="newQuestion.color" @change="compareConfig">
-                            <span class="text-accentColor ml-2" v-if="newQuestion.text.length" @click="addQuestionToConfig">save</span>
+                    <transition name="component-fade" mode="out-in">
+                        <div class="border-l-4 ml-4 mt-4 w-full flex items-center" :style="{'border-color': newQuestion.color}" v-if="showNewQuestionInput" @keyup.enter="addQuestionToConfig">
+                            <input class="ml-1 py-1 px-2 focus:outline-none" placeholder="Enter your question" ref="newQuestion" v-model="newQuestion.text" type="text" @input="compareConfig"/>
+                            <input type="color" v-model="newQuestion.color">
+                            <transition name="component-fade" mode="out-in">
+                                <span class="text-accentColor text-xs ml-4 mt-1 cursor-pointer" v-if="newQuestion.text.length" @click="addQuestionToConfig">save</span>
+                            </transition>
+
                         </div>
                     </transition>
-                    <div class="flex full mt-6 text-gray-700 items-center" @click="showNewQuestionInput = true">
+                    <div class="flex full mt-6 text-gray-700 items-center cursor-pointer" @click="focusNewQuestionInput">
                         <font-awesome-icon icon="plus"/>
                         <span class="ml-2">Add a question</span>
                     </div>
@@ -75,12 +79,24 @@
       editField(fieldRef) {
         this.editFieldShown = fieldRef;
       },
+      focusNewQuestionInput() {
+        this.showNewQuestionInput = true;
+        this.$nextTick( () => {
+          this.$refs.newQuestion.focus();
+        })
+      },
       addQuestionToConfig() {
         let question = this.lodash.clone(this.newQuestion);
-        this.standUpData.questions.push(question);
+        if(question.text.length) {
+          this.standUpData.questions.push(question);
+          this.compareConfig();
+          this.newQuestion.text = "";
+          this.showNewQuestionInput = false;
+        }
+      },
+      deleteQuestion(index) {
+        this.standUpData.questions.splice(index, 1);
         this.compareConfig();
-        this.newQuestion.text = "";
-        this.showNewQuestionInput = false;
       }
     },
     mounted() {
