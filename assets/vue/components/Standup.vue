@@ -26,8 +26,9 @@
                 <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-accentColor w-content">Questions</h3>
                 <div class="flex flex-col ">
                     <div class="w-full flex-flex-col" v-for="question in standUpData.questions" :key="question.id">
-                        <div class="border-l-4 ml-4 mt-4 " :style="{'border-color': question.color}">
+                        <div class="border-l-4 ml-4 mt-4 w-full flex items-center" :style="{'border-color': question.color}">
                             <input class="ml-1 py-1 px-2 focus:outline-none" type="text" v-model="question.text" @input="compareConfig"/>
+                            <input type="color" v-model="question.color" @change="compareConfig">
                         </div>
                     </div>
                 </div>
