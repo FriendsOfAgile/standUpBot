@@ -36,7 +36,7 @@
                         <div class="border-l-4 ml-4 mt-4 w-full flex items-center" :style="{'border-color': newQuestion.color}" v-if="showNewQuestionInput" @keyup.enter="addQuestionToConfig">
                             <input class="ml-1 py-1 px-2 focus:outline-none" placeholder="Enter your question" ref="newQuestion" v-model="newQuestion.text" type="text" @input="compareConfig"/>
                             <input type="color" v-model="newQuestion.color">
-                            <transition name="component-fade" mode="out-in">
+                            <transition name="component-fade">
                                 <span class="text-accentColor text-xs ml-4 mt-1 cursor-pointer" v-if="newQuestion.text.length" @click="addQuestionToConfig">save</span>
                             </transition>
 
