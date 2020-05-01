@@ -31,6 +31,17 @@
                             <input type="color" v-model="question.color" @change="compareConfig">
                         </div>
                     </div>
+                    <transition name="component-fade">
+                        <div class="border-l-4 ml-4 mt-4 w-full flex items-center" :style="{'border-color': newQuestion.color}" v-if="showNewQuestionInput">
+                            <input class="ml-1 py-1 px-2 focus:outline-none" placeholder="Enter your question" v-model="newQuestion.text" type="text" @input="compareConfig"/>
+                            <input type="color" v-model="newQuestion.color" @change="compareConfig">
+                            <span class="text-accentColor ml-2" v-if="newQuestion.text.length" @click="addQuestionToConfig">save</span>
+                        </div>
+                    </transition>
+                    <div class="flex full mt-6 text-gray-700 items-center" @click="showNewQuestionInput = true">
+                        <font-awesome-icon icon="plus"/>
+                        <span class="ml-2">Add a question</span>
+                    </div>
                 </div>
 
             </div>
@@ -47,6 +58,11 @@
         initialStandUpData: {},
         standUpData: {},
         editFieldShown: "",
+        showNewQuestionInput: false,
+        newQuestion: {
+          text: "",
+          color: '#dddddd'
+        },
         edited: false,
       }
     },
@@ -58,6 +74,13 @@
       },
       editField(fieldRef) {
         this.editFieldShown = fieldRef;
+      },
+      addQuestionToConfig() {
+        let question = this.lodash.clone(this.newQuestion);
+        this.standUpData.questions.push(question);
+        this.compareConfig();
+        this.newQuestion.text = "";
+        this.showNewQuestionInput = false;
       }
     },
     mounted() {

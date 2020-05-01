@@ -14,12 +14,14 @@ import { faChartPie } from '@fortawesome/free-solid-svg-icons'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import { faSave } from '@fortawesome/free-solid-svg-icons'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faCogs)
 library.add(faChartPie)
 library.add(faEdit)
 library.add(faCheck)
 library.add(faSave)
+library.add(faPlus)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
