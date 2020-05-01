@@ -8,26 +8,26 @@
                     Config saved
                 </span>
                 <span v-else>
-                      <font-awesome-icon icon="save" class="mr-1"/>
-                       Save changes
+                    <font-awesome-icon icon="save" class="mr-1"/>
+                    Save changes
                 </span>
             </button>
         </div>
         <div class="flex flex-col p-6">
             <div class="flex flex-col space-y-4">
                 <label for="beforeMessage" class="text-gray-500">Intro message:
-                    <input id="beforeMessage" class="w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" autofocus type="text" v-model="standUpData.messageBefore" @input="compareConfig">
+                    <input id="beforeMessage" class="focus:outline-none w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" autofocus type="text" v-model="standUpData.messageBefore" @input="compareConfig">
                 </label>
                 <label for="afterMessage" class="text-gray-500">Outro message:
-                    <input id="afterMessage" class="w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" type="text" v-model="standUpData.messageAfter" @input="compareConfig">
+                    <input id="afterMessage" class="focus:outline-none w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" type="text" v-model="standUpData.messageAfter" @input="compareConfig">
                 </label>
             </div>
             <div class="flex flex-col p-1 mt-2">
                 <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-accentColor w-content">Questions</h3>
                 <div class="flex flex-col ">
                     <div class="w-full flex-flex-col" v-for="question in standUpData.questions" :key="question.id">
-                        <div class="border-l-4 py-1 px-2 ml-4 mt-4 " :style="{'border-color': question.color}">
-                            <input type="text" v-model="question.text" @input="compareConfig"/>
+                        <div class="border-l-4 ml-4 mt-4 " :style="{'border-color': question.color}">
+                            <input class="ml-1 py-1 px-2 focus:outline-none" type="text" v-model="question.text" @input="compareConfig"/>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,6 @@
       return {
         initialStandUpData: {},
         standUpData: {},
-        questions: [],
         editFieldShown: "",
         edited: false,
       }
