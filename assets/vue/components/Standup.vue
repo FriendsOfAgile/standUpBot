@@ -26,9 +26,16 @@
                 <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-accentColor w-content">Questions</h3>
                 <div class="flex flex-col ">
                         <div class="w-full flex-flex-col" v-for="(question, index) in standUpData.questions" :key="question['@id']">
-                            <div class="border-l-4 ml-4 mt-4 w-full flex items-center" :style="{'border-color': question.color}">
+                            <div class="border-l-4 ml-4 mt-4 w-full flex items-center relative" :style="{'border-color': question.color}">
                                 <input class="ml-1 py-1 px-2 focus:outline-none" type="text" v-model="question.text" @input="compareConfig"/>
-                                <input type="color" v-model="question.color" @change="compareConfig">
+<!--                             <input type="color" v-model="question.color" @change="compareConfig">-->
+                                <div style="width: 24px; height: 24px;" :style="{'background-color': question.color}" class="rounded cursor-pointer" @click="showColorPicker = index"></div>
+                                <transition name="fade">
+                                    <div class="color-picker-container p-2 z-max" v-if="showColorPicker === index" @mouseleave="showColorPicker = false">
+                                        <v-swatches v-model="question.color" @input="compareConfig, showColorPicker = false" popover-y="up" inline="true"/>
+                                    </div>
+                                </transition>
+
                                 <span class="text-red-600 text-xs ml-4 mt-1 cursor-pointer" @click="deleteQuestion(index)">delete</span>
                             </div>
                         </div>
@@ -55,13 +62,18 @@
 </template>
 
 <script>
+  import VSwatches from 'vue-swatches'
   export default {
     name: "Standup",
+    components: {
+      VSwatches
+    },
     data() {
       return {
         initialStandUpData: {},
         standUpData: {},
         editFieldShown: "",
+        showColorPicker: false,
         showNewQuestionInput: false,
         newQuestion: {
           text: "",
@@ -116,5 +128,12 @@
 <style scoped>
     .edit-field-icon {
         color: #7e91ff;
+    }
+    .color-picker-container {
+        position: absolute;
+        z-index: 99;
+        background-color: #fff;
+        left: 10em;
+        max-width: 30%;
     }
 </style>

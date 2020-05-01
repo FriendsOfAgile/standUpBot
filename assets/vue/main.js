@@ -5,6 +5,7 @@ import store from './store'
 import VueLodash from 'vue-lodash'
 import lodash from 'lodash'
 import tailwind from 'tailwindcss'
+import 'vue-swatches/dist/vue-swatches.css'
 import '../css/tailwind.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
