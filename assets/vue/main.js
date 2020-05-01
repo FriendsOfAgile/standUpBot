@@ -10,10 +10,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCogs } from '@fortawesome/free-solid-svg-icons'
 import { faChartPie } from '@fortawesome/free-solid-svg-icons'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faSave } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faCogs)
 library.add(faChartPie)
 library.add(faEdit)
+library.add(faCheck)
+library.add(faSave)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

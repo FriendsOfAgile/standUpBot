@@ -1,15 +1,25 @@
 <template>
     <div class="w-full flex flex-col">
-        <div class="flex px-6 pt-6">
+        <div class="flex justify-between px-6 pt-6">
             <h3 class="font-bold text-2xl text-gray-700">Standup {{ standUpData.name }}</h3>
+            <button class="bg-white text-white border-2 border-gray-500 font-bold py-2 px-4 rounded" :class="[!edited ? 'cursor-not-allowed' : '', !edited ? 'opacity-50' : '', !edited ? 'text-gray-500' : '', edited ? 'bg-accentColor' : '', edited ? 'border-accentColor' : '' ]">
+                <span v-if="!edited">
+                    <font-awesome-icon icon="check" class="mr-1"/>
+                    Config saved
+                </span>
+                <span v-else>
+                      <font-awesome-icon icon="save" class="mr-1"/>
+                       Save changes
+                </span>
+            </button>
         </div>
         <div class="flex flex-col p-6">
             <div class="flex flex-col space-y-4">
                 <label for="beforeMessage" class="text-gray-500">Intro message:
-                    <input id="beforeMessage" class="w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" autofocus type="text" v-model="standUpData.messageBefore">
+                    <input id="beforeMessage" class="w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" autofocus type="text" v-model="standUpData.messageBefore" @input="compareConfigs()">
                 </label>
                 <label for="afterMessage" class="text-gray-500">Outro message:
-                    <input id="afterMessage" class="w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" type="text" v-model="standUpData.messageAfter">
+                    <input id="afterMessage" class="w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" type="text" v-model="standUpData.messageAfter" @input="compareConfigs()">
                 </label>
             </div>
             <div class="flex flex-col p-1 mt-2">
@@ -33,36 +43,33 @@
     name: "Standup",
     data() {
       return {
+        initialStandUpData: {},
         standUpData: {},
         editFieldShown: "",
         edited: false,
       }
     },
     methods: {
+      compareConfigs() {
+        if(JSON.stringify(this.standUpData) !== JSON.stringify(this.initialStandUpData)) {
+          this.edited = true;
+        } else this.edited = false;
+      },
       editField(fieldRef) {
         this.editFieldShown = fieldRef;
       }
     },
     mounted() {
-      console.log(this.$route.params.id);
       if(this.$store.getters.getStandUpConfigs.length) {
-        this.standUpData = this.$store.getters.getStandUpConfigData(Number(this.$route.params.id));
+        this.initialStandUpData = this.$store.getters.getStandUpConfigData(Number(this.$route.params.id));
+        this.standUpData = {...this.initialStandUpData};
       } else {
         this.$store.dispatch('GET_STANDUP_CONFIGS').then( () => {
-          this.standUpData = this.$store.getters.getStandUpConfigData(Number(this.$route.params.id));
-        })
+          this.initialStandUpData = this.$store.getters.getStandUpConfigData(Number(this.$route.params.id));
+          this.standUpData = {...this.initialStandUpData};
+        });
       }
     },
-    watch: {
-        standUpData: {
-          handler(newValue, oldValue) {
-            if(newValue !== oldValue) {
-              this.edited = true;
-            }
-          },
-          deep: true
-        }
-    }
   }
 </script>
 
