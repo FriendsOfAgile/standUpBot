@@ -120,6 +120,7 @@
         this.$loading(true);
         return this.$store.dispatch('UPDATE_STANDUP_CONFIG', configData).then( () => {
           this.edited = false;
+          this.initialStandUpData = this.lodash.cloneDeep(configData);
           this.$loading(false);
         })
       }

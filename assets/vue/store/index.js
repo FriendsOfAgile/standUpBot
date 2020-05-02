@@ -51,10 +51,8 @@ export default new Vuex.Store({
         questions: configData.questions,
         members: configData.members
       }).then( (response) => {
-        console.log('response update ', response.data);
         commit('updateConfig', response.data);
       }).catch( (error) => {
-        console.log(error);
       })
     }
   },
