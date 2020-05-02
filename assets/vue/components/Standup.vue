@@ -125,8 +125,14 @@
     },
     computed: {
       getStandUpName() {
-        if(this.standUpData.name) return this.standUpData.name;
-        else return this.standUpData.name = this.initialStandUpData.name;
+        if(this.standUpData.name) {
+          return this.standUpData.name;
+        } else {
+          this.standUpData.name = this.initialStandUpData.name;
+          this.compareConfig();
+          return this.standUpData.name;
+        }
+
       }
     },
     mounted() {
