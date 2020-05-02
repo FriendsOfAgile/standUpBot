@@ -88,6 +88,7 @@
           color: '#dddddd'
         },
         edited: false,
+        dataLoaded: false,
       }
     },
     methods: {
@@ -125,25 +126,28 @@
     },
     computed: {
       getStandUpName() {
-        if(this.standUpData.name) {
-          return this.standUpData.name;
-        } else {
-          this.standUpData.name = this.initialStandUpData.name;
-          this.compareConfig();
-          return this.standUpData.name;
+        if(this.dataLoaded) {
+          if(this.standUpData.name) {
+            return this.standUpData.name;
+          } else {
+            this.standUpData.name = this.initialStandUpData.name;
+            this.compareConfig();
+            return this.standUpData.name;
+          }
         }
-
       }
     },
     mounted() {
       if(this.$store.getters.getStandUpConfigs.length) {
         this.initialStandUpData = this.$store.getters.getStandUpConfigData(Number(this.$route.params.id));
         this.standUpData = this.lodash.cloneDeep(this.initialStandUpData);
+        this.dataLoaded = true;
       } else {
         this.$loading(true);
         this.$store.dispatch('GET_STANDUP_CONFIGS').then( () => {
           this.initialStandUpData = this.$store.getters.getStandUpConfigData(Number(this.$route.params.id));
           this.standUpData = this.lodash.cloneDeep(this.initialStandUpData);
+          this.dataLoaded = true;
           this.$loading(false);
         });
       }
