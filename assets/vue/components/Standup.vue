@@ -2,16 +2,18 @@
     <div class="w-full flex flex-col">
         <div class="flex justify-between px-6 pt-6">
             <h3 class="font-bold text-2xl text-gray-700">Standup {{ standUpData.name }}</h3>
-            <button @click="updateStandUpConfig(standUpData)" class="bg-white text-white border-2 border-gray-500 font-bold py-2 px-4 rounded focus:outline-none" :class="[!edited ? 'cursor-not-allowed' : '', !edited ? 'opacity-50' : '', !edited ? 'text-gray-500' : '', edited ? 'bg-accentColor' : '', edited ? 'border-accentColor' : '' ]">
-                <span v-if="!edited">
-                    <font-awesome-icon icon="check" class="mr-1"/>
-                    Config saved
-                </span>
-                <span v-else>
+            <button v-if="edited" @click="updateStandUpConfig(standUpData)" class="bg-accentColor text-white border-2 border-accentColor font-bold py-2 px-4 rounded focus:outline-none">
+                <span>
                     <font-awesome-icon icon="save" class="mr-1"/>
                     Save changes
                 </span>
             </button>
+            <div class="bg-white text-white border-2 border-gray-500 font-bold py-2 px-4 rounded cursor-not-allowed opacity-50 text-gray-500" v-else>
+                <span>
+                    <font-awesome-icon icon="check" class="mr-1"/>
+                    Config saved
+                </span>
+            </div>
         </div>
         <div class="flex flex-col p-6">
             <div class="flex flex-col space-y-4">
