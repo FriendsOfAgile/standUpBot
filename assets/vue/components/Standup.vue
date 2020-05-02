@@ -1,19 +1,23 @@
 <template>
     <div class="w-full flex flex-col">
         <div class="flex justify-between px-6 pt-6">
-            <h3 class="font-bold text-2xl text-gray-700">Standup {{ standUpData.name }}</h3>
-            <button v-if="edited" @click="updateStandUpConfig(standUpData)" class="bg-accentColor text-white border-2 border-accentColor font-bold py-2 px-4 rounded focus:outline-none">
+            <h3 v-if="!showEditNameInput" class="font-bold text-2xl text-gray-700 cursor-pointer" @click="showEditNameInput = true, focusInput('standupName')"><span class="font-normal">Standup</span> {{ getStandUpName }}</h3>
+            <input v-if="showEditNameInput" ref="standupName" class="focus:outline-none w-3/4 text-gray-700 px-3 text-2xl font-bold" type="text" v-model="standUpData.name" @input="compareConfig" @keyup.enter="showEditNameInput = false" @blur="showEditNameInput = false">
+            <div>
+                <button v-if="edited" @click="updateStandUpConfig(standUpData)" class="bg-accentColor text-white border-2 border-accentColor font-bold py-2 px-4 rounded focus:outline-none">
                 <span>
                     <font-awesome-icon icon="save" class="mr-1"/>
                     Save changes
                 </span>
-            </button>
-            <div class="bg-white text-white border-2 border-gray-500 font-bold py-2 px-4 rounded cursor-not-allowed opacity-50 text-gray-500" v-else>
+                </button>
+                <div class="bg-white text-white border-2 border-gray-500 font-bold py-2 px-4 rounded cursor-not-allowed opacity-50 text-gray-500" v-else>
                 <span>
                     <font-awesome-icon icon="check" class="mr-1"/>
                     Config saved
                 </span>
+                </div>
             </div>
+
         </div>
         <div class="flex flex-col p-6">
             <div class="flex flex-col space-y-4">
@@ -43,7 +47,7 @@
                         </div>
                     <transition name="component-fade" mode="out-in">
                         <div class="border-l-4 ml-4 mt-4 w-full flex items-center relative" :style="{'border-color': newQuestion.color}" v-if="showNewQuestionInput" @keyup.enter="addQuestionToConfig">
-                            <input class="ml-1 py-1 px-2 focus:outline-none" placeholder="Enter your question" ref="newQuestion" v-model="newQuestion.text" type="text" @input="compareConfig"/>
+                            <input class="ml-1 py-1 px-2 focus:outline-none" placeholder="Enter your question" ref="question" v-model="newQuestion.text" type="text" @input="compareConfig"/>
                             <div style="width: 24px; height: 24px;" :style="{'background-color': newQuestion.color}" class="rounded cursor-pointer" @click="showColorPicker = 'newQuestion'"></div>
                             <div class="color-picker-container p-2 z-max" v-if="showColorPicker === 'newQuestion'" @mouseleave="showColorPicker = false">
                                 <v-swatches v-model="newQuestion.color" @input="showColorPicker = false" popover-y="up" inline="true"/>
@@ -53,7 +57,7 @@
                             </transition>
                         </div>
                     </transition>
-                    <div class="flex full mt-6 text-gray-700 items-center cursor-pointer" @click="focusNewQuestionInput">
+                    <div class="flex full mt-6 text-gray-700 items-center cursor-pointer" @click="showNewQuestionInput = true, focusInput('question')">
                         <font-awesome-icon icon="plus"/>
                         <span class="ml-2">Add a question</span>
                     </div>
@@ -76,7 +80,7 @@
       return {
         initialStandUpData: {},
         standUpData: {},
-        editFieldShown: "",
+        showEditNameInput: false,
         showColorPicker: false,
         showNewQuestionInput: false,
         newQuestion: {
@@ -92,13 +96,9 @@
           this.edited = true;
         } else this.edited = false;
       },
-      editField(fieldRef) {
-        this.editFieldShown = fieldRef;
-      },
-      focusNewQuestionInput() {
-        this.showNewQuestionInput = true;
+      focusInput(ref) {
         this.$nextTick( () => {
-          this.$refs.newQuestion.focus();
+          this.$refs[ref].focus();
         })
       },
       addQuestionToConfig() {
@@ -121,6 +121,12 @@
           this.edited = false;
           this.$loading(false);
         })
+      }
+    },
+    computed: {
+      getStandUpName() {
+        if(this.standUpData.name) return this.standUpData.name;
+        else return this.standUpData.name = this.initialStandUpData.name;
       }
     },
     mounted() {
