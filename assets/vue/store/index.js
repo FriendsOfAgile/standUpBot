@@ -23,17 +23,39 @@ export default new Vuex.Store({
   mutations: {
     standUpConfigs (state, configs) {
       state.standupConfigs = configs;
+    },
+    updateConfig (state, config) {
+      let index = state.standupConfigs.findIndex( item => item.id === config.id);
+      console.log('found ', index);
+      //delete config['@context']; // уточнить почему этого нет в других вызовах
+      console.log('new value', config);
+      state.standupConfigs[index] = config;
+      console.log('new state ', state.standupConfigs);
     }
   },
   actions: {
     GET_STANDUP_CONFIGS ({ commit }) {
       return axios.get('/api/configs')
-        .then(function (response) {
+        .then( (response) => {
           commit('standUpConfigs', response.data['hydra:member']);
         })
-        .catch(function (error) {
+        .catch( (error) => {
           console.log(error);
         })
+    },
+    UPDATE_STANDUP_CONFIG ({ commit }, configData) {
+      return axios.put(`/api/configs/${configData.id}`, {
+        name: configData.name,
+        messageBefore: configData.messageBefore,
+        messageAfter: configData.messageAfter,
+        questions: configData.questions,
+        members: configData.members
+      }).then( (response) => {
+        console.log('response update ', response.data);
+        commit('updateConfig', response.data);
+      }).catch( (error) => {
+        console.log(error);
+      })
     }
   },
   modules: {

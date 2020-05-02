@@ -2,7 +2,7 @@
     <div class="w-full flex flex-col">
         <div class="flex justify-between px-6 pt-6">
             <h3 class="font-bold text-2xl text-gray-700">Standup {{ standUpData.name }}</h3>
-            <button class="bg-white text-white border-2 border-gray-500 font-bold py-2 px-4 rounded focus:outline-none" :class="[!edited ? 'cursor-not-allowed' : '', !edited ? 'opacity-50' : '', !edited ? 'text-gray-500' : '', edited ? 'bg-accentColor' : '', edited ? 'border-accentColor' : '' ]">
+            <button @click="updateStandUpConfig(standUpData)" class="bg-white text-white border-2 border-gray-500 font-bold py-2 px-4 rounded focus:outline-none" :class="[!edited ? 'cursor-not-allowed' : '', !edited ? 'opacity-50' : '', !edited ? 'text-gray-500' : '', edited ? 'bg-accentColor' : '', edited ? 'border-accentColor' : '' ]">
                 <span v-if="!edited">
                     <font-awesome-icon icon="check" class="mr-1"/>
                     Config saved
@@ -112,6 +112,12 @@
       deleteQuestion(index) {
         this.standUpData.questions.splice(index, 1);
         this.compareConfig();
+      },
+      updateStandUpConfig(configData) {
+        console.log(configData);
+        return this.$store.dispatch('UPDATE_STANDUP_CONFIG', configData).then( () => {
+          console.log(this.$store.getters.getStandUpConfigs);
+        })
       }
     },
     mounted() {
