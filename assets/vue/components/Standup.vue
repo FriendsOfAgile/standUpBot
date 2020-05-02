@@ -114,9 +114,10 @@
         this.compareConfig();
       },
       updateStandUpConfig(configData) {
-        console.log(configData);
+        this.$loading(true);
         return this.$store.dispatch('UPDATE_STANDUP_CONFIG', configData).then( () => {
-          console.log(this.$store.getters.getStandUpConfigs);
+          this.edited = false;
+          this.$loading(false);
         })
       }
     },
@@ -125,9 +126,11 @@
         this.initialStandUpData = this.$store.getters.getStandUpConfigData(Number(this.$route.params.id));
         this.standUpData = this.lodash.cloneDeep(this.initialStandUpData);
       } else {
+        this.$loading(true);
         this.$store.dispatch('GET_STANDUP_CONFIGS').then( () => {
           this.initialStandUpData = this.$store.getters.getStandUpConfigData(Number(this.$route.params.id));
           this.standUpData = this.lodash.cloneDeep(this.initialStandUpData);
+          this.$loading(false);
         });
       }
     },
