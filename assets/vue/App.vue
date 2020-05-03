@@ -19,10 +19,11 @@
             if (window.user) {
                 this.$store.state.user = window.user;
                 delete(window.user);
-
+                this.$loading(true);
               return this.$store.dispatch('GET_STANDUP_CONFIGS')
                 .then( () => {
                   this.standupConfigs = this.$store.state.standupConfigs;
+                  this.$loading(false);
                 })
             }
         }

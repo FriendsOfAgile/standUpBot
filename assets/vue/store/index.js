@@ -24,6 +24,9 @@ export default new Vuex.Store({
     standUpConfigs (state, configs) {
       state.standupConfigs = configs;
     },
+    saveNewConfig (state, config) {
+      state.standupConfigs.push(config);
+    },
     updateConfig (state, config) {
       let index = state.standupConfigs.findIndex( item => item.id === config.id);
       //delete config['@context']; // уточнить почему этого нет в других вызовах
@@ -44,6 +47,20 @@ export default new Vuex.Store({
           console.log(error);
         })
     },
+    SAVE_NEW_STANDUP_CONFIG ({ commit }, configData) {
+      console.log(configData);
+      return axios.post('/api/configs', {
+        name: configData.name,
+        messageBefore: configData.messageBefore,
+        messageAfter: configData.messageAfter,
+        questions: configData.questions,
+        members: configData.members
+      }).then( (response) => {
+        commit('saveNewConfig', response.data);
+      }).catch( (error) => {
+        console.log(error);
+      })
+    },
     UPDATE_STANDUP_CONFIG ({ commit }, configData) {
       return axios.put(`/api/configs/${configData.id}`, {
         name: configData.name,
@@ -54,11 +71,14 @@ export default new Vuex.Store({
       }).then( (response) => {
         commit('updateConfig', response.data);
       }).catch( (error) => {
+        console.log(error)
       })
     },
     DELETE_STANDUP_CONFIG({ commit }, id) {
       return axios.delete(`/api/configs/${id}`).then( () => {
         commit('deleteConfig', id);
+      }).catch( (error) => {
+        console.log(error);
       })
     }
   },

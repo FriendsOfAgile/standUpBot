@@ -30,6 +30,11 @@ Vue.use(VueRouter)
     component: Standup,
   },
   {
+    path: '/dashboard/standups/new',
+    name: 'Standup',
+    component: Standup,
+  },
+  {
     path: '/dashboard/reports/',
     name: 'Reports',
     component: Reports

@@ -4,7 +4,7 @@
             <h3 v-if="!showEditNameInput" class="font-bold text-2xl text-gray-700 cursor-pointer" @click="showEditNameInput = true, focusInput('standupName')"><span class="font-normal">Standup</span> {{ getStandUpName }}</h3>
             <input v-if="showEditNameInput" ref="standupName" class="focus:outline-none w-3/4 text-gray-700 px-3 text-2xl font-bold" type="text" v-model="standUpData.name" @input="compareConfig" @keyup.enter="showEditNameInput = false" @blur="showEditNameInput = false">
             <div>
-                <button v-if="edited" @click="updateStandUpConfig(standUpData)" class="bg-accentColor text-white border-2 border-accentColor font-bold py-2 px-4 rounded focus:outline-none">
+                <button v-if="edited" @click="saveStandUpConfig(standUpData)" class="bg-accentColor text-white border-2 border-accentColor font-bold py-2 px-4 rounded focus:outline-none">
                 <span>
                     <font-awesome-icon icon="save" class="mr-1"/>
                     Save changes
@@ -116,13 +116,22 @@
         this.standUpData.questions.splice(index, 1);
         this.compareConfig();
       },
-      updateStandUpConfig(configData) {
+      saveStandUpConfig(configData) {
         this.$loading(true);
-        return this.$store.dispatch('UPDATE_STANDUP_CONFIG', configData).then( () => {
-          this.edited = false;
-          this.initialStandUpData = this.lodash.cloneDeep(configData);
-          this.$loading(false);
-        })
+        if(this.standUpData.id) {
+          return this.$store.dispatch('UPDATE_STANDUP_CONFIG', configData).then( () => {
+            this.edited = false;
+            this.initialStandUpData = this.lodash.cloneDeep(configData); // this is needed to update initialStandup, so comparing works if component is not re-rendered
+            this.$loading(false);
+          })
+        } else {
+          return this.$store.dispatch('SAVE_NEW_STANDUP_CONFIG', configData).then( () => {
+            this.edited = false;
+            this.initialStandUpData = this.lodash.cloneDeep(configData); // this is needed to update initialStandup, so comparing works if component is not re-rendered
+            this.$loading(false);
+          })
+        }
+
       }
     },
     computed: {
@@ -139,18 +148,31 @@
       }
     },
     mounted() {
-      if(this.$store.getters.getStandUpConfigs.length) {
-        this.initialStandUpData = this.$store.getters.getStandUpConfigData(Number(this.$route.params.id));
-        this.standUpData = this.lodash.cloneDeep(this.initialStandUpData);
-        this.dataLoaded = true;
-      } else {
-        this.$loading(true);
-        this.$store.dispatch('GET_STANDUP_CONFIGS').then( () => {
+      if(this.$route.params.id !== 'new') {
+        if(this.$store.getters.getStandUpConfigs.length) {
           this.initialStandUpData = this.$store.getters.getStandUpConfigData(Number(this.$route.params.id));
           this.standUpData = this.lodash.cloneDeep(this.initialStandUpData);
           this.dataLoaded = true;
-          this.$loading(false);
-        });
+        } else {
+          this.$loading(true);
+          this.$store.dispatch('GET_STANDUP_CONFIGS').then( () => {
+            this.initialStandUpData = this.$store.getters.getStandUpConfigData(Number(this.$route.params.id));
+            this.standUpData = this.lodash.cloneDeep(this.initialStandUpData);
+            this.dataLoaded = true;
+            this.$loading(false);
+          });
+        }
+      }
+      else {
+        this.initialStandUpData = {
+          name: "New standup",
+          messageBefore: "",
+          messageAfter: "",
+          questions: [],
+          members: [],
+        };
+        this.standUpData = this.lodash.cloneDeep(this.initialStandUpData);
+        this.dataLoaded = true;
       }
     },
   }
