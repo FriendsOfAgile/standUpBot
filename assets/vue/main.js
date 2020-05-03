@@ -5,6 +5,7 @@ import store from './store'
 import VueLodash from 'vue-lodash'
 import lodash from 'lodash'
 import VueLoading from "vuejs-loading-plugin";
+import VModal from 'vue-js-modal'
 import Loader from './components/Loader.vue';
 import tailwind from 'tailwindcss'
 import 'vue-swatches/dist/vue-swatches.css'
@@ -34,6 +35,7 @@ Vue.use(VueLoading, {
   text: 'Загрузка', // default 'Loading'
   customLoader: Loader
 });
+Vue.use(VModal)
 
 Vue.config.productionTip = false
 

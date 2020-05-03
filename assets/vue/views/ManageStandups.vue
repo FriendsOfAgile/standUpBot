@@ -12,8 +12,14 @@
                     <div class="text-gray-500">Questions: <span class="text-gray-800">{{ standup.questions.length }}</span></div>
                     <div class="text-gray-500">Members: <span class="text-gray-800">{{ standup.members.length }}</span></div>
                 </router-link>
+                <button class="p-4 bg-red-400" @click="showDeleteConfirmationModal">Delete</button>
             </div>
         </div>
+
+        <modal name="confirm-standup-deletion" width="30%" height="40%">
+
+            <button @click="deleteStandUpConfig">agree!</button>
+        </modal>
     </div>
 </template>
 
@@ -22,6 +28,15 @@
     name: "ManageStandup",
     data() {
       return {
+      }
+    },
+    methods: {
+      showDeleteConfirmationModal() {
+        this.$modal.show('confirm-standup-deletion')
+      },
+      deleteStandUpConfig() {
+        alert('ok!');
+        this.$modal.hide('confirm-standup-deletion');
       }
     },
     computed: {
