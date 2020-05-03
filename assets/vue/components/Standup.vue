@@ -126,9 +126,9 @@
           })
         } else {
           return this.$store.dispatch('SAVE_NEW_STANDUP_CONFIG', configData).then( () => {
-            this.edited = false;
-            this.initialStandUpData = this.lodash.cloneDeep(configData); // this is needed to update initialStandup, so comparing works if component is not re-rendered
+            // TODO getter vuex to allow keep editing same config (need to get id from store and change route path / push to saved config
             this.$loading(false);
+            this.$router.push('/dashboard/standups/');
           })
         }
 
