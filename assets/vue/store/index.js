@@ -26,11 +26,12 @@ export default new Vuex.Store({
     },
     updateConfig (state, config) {
       let index = state.standupConfigs.findIndex( item => item.id === config.id);
-      console.log('found ', index);
       //delete config['@context']; // уточнить почему этого нет в других вызовах
-      console.log('new value', config);
       state.standupConfigs[index] = config;
-      console.log('new state ', state.standupConfigs);
+    },
+    deleteConfig (state, id) {
+      let index = state.standupConfigs.findIndex( item => item.id === id);
+      state.standupConfigs.splice(index, 1);
     }
   },
   actions: {
@@ -53,6 +54,11 @@ export default new Vuex.Store({
       }).then( (response) => {
         commit('updateConfig', response.data);
       }).catch( (error) => {
+      })
+    },
+    DELETE_STANDUP_CONFIG({ commit }, id) {
+      return axios.delete(`/api/configs/${id}`).then( () => {
+        commit('deleteConfig', id);
       })
     }
   },
