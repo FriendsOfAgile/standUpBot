@@ -28,13 +28,20 @@
                     <input id="afterMessage" class="focus:outline-none w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" type="text" v-model="standUpData.messageAfter" @input="compareConfig">
                 </label>
             </div>
-            <div class="flex flex-col p-1 mt-2">
-                <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-accentColor w-content">Questions</h3>
-                <div class="flex flex-col ">
+
+
+            <div class="w-full flex space-x-6 mt-4">
+                <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-accentColor w-content cursor-pointer" @click="activeTab = 'questions'">Questions</h3>
+                <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-accentColor w-content cursor-pointer" @click="activeTab = 'members'">Members</h3>
+            </div>
+
+            <transition name="component-fade" mode="out-in">
+                <div class="flex flex-col p-1 mt-2" v-if="activeTab === 'questions'">
+                    <div class="flex flex-col ">
                         <div class="w-full flex-flex-col" v-for="(question, index) in standUpData.questions" :key="question['@id']">
                             <div class="border-l-4 ml-4 mt-4 w-full flex items-center relative" :style="{'border-color': question.color}">
                                 <input class="ml-1 py-1 px-2 focus:outline-none" type="text" v-model="question.text" @input="compareConfig"/>
-<!--                             <input type="color" v-model="question.color" @change="compareConfig">-->
+                                <!--                             <input type="color" v-model="question.color" @change="compareConfig">-->
                                 <div style="width: 24px; height: 24px;" :style="{'background-color': question.color}" class="rounded cursor-pointer" @click="showColorPicker = index"></div>
                                 <transition name="fade">
                                     <div class="color-picker-container p-2 z-max" v-if="showColorPicker === index" @mouseleave="showColorPicker = false">
@@ -45,25 +52,32 @@
                                 <span class="text-red-600 text-xs ml-4 mt-1 cursor-pointer" @click="deleteQuestion(index)">delete</span>
                             </div>
                         </div>
-                    <transition name="component-fade" mode="out-in">
-                        <div class="border-l-4 ml-4 mt-4 w-full flex items-center relative" :style="{'border-color': newQuestion.color}" v-if="showNewQuestionInput" @keyup.enter="addQuestionToConfig">
-                            <input class="ml-1 py-1 px-2 focus:outline-none" placeholder="Enter your question" ref="question" v-model="newQuestion.text" type="text" @input="compareConfig" @blur="addQuestionToConfig"/>
-                            <div style="width: 24px; height: 24px;" v-if="newQuestion.text" :style="{'background-color': newQuestion.color}" class="rounded cursor-pointer" @click="showColorPicker = 'newQuestion'"></div>
-                            <div class="color-picker-container p-2 z-max" v-if="showColorPicker === 'newQuestion'" @mouseleave="showColorPicker = false">
-                                <v-swatches v-model="newQuestion.color" @input="showColorPicker = false" popover-y="up" inline="true"/>
+                        <transition name="component-fade" mode="out-in">
+                            <div class="border-l-4 ml-4 mt-4 w-full flex items-center relative" :style="{'border-color': newQuestion.color}" v-if="showNewQuestionInput" @keyup.enter="addQuestionToConfig">
+                                <input class="ml-1 py-1 px-2 focus:outline-none" placeholder="Enter your question" ref="question" v-model="newQuestion.text" type="text" @input="compareConfig" @blur="addQuestionToConfig"/>
+                                <div style="width: 24px; height: 24px;" v-if="newQuestion.text" :style="{'background-color': newQuestion.color}" class="rounded cursor-pointer" @click="showColorPicker = 'newQuestion'"></div>
+                                <div class="color-picker-container p-2 z-max" v-if="showColorPicker === 'newQuestion'" @mouseleave="showColorPicker = false">
+                                    <v-swatches v-model="newQuestion.color" @input="showColorPicker = false" popover-y="up" inline="true"/>
+                                </div>
+                                <transition name="component-fade">
+                                    <span class="text-accentColor text-xs ml-4 mt-1 cursor-pointer" v-if="newQuestion.text.length" @click="addQuestionToConfig">save</span>
+                                </transition>
                             </div>
-                            <transition name="component-fade">
-                                <span class="text-accentColor text-xs ml-4 mt-1 cursor-pointer" v-if="newQuestion.text.length" @click="addQuestionToConfig">save</span>
-                            </transition>
+                        </transition>
+                        <div class="flex full mt-6 text-gray-700 items-center cursor-pointer" @click="showNewQuestionInput = true, focusInput('question')">
+                            <font-awesome-icon icon="plus"/>
+                            <span class="ml-2">Add a question</span>
                         </div>
-                    </transition>
-                    <div class="flex full mt-6 text-gray-700 items-center cursor-pointer" @click="showNewQuestionInput = true, focusInput('question')">
-                        <font-awesome-icon icon="plus"/>
-                        <span class="ml-2">Add a question</span>
                     </div>
                 </div>
+            </transition>
 
-            </div>
+            <transition name="component-fade" mode="out-in">
+                <div class="flex flex-col p-1 mt-2" v-if="activeTab === 'members'">
+                    {{ workspaceMembers }}
+                </div>
+            </transition>
+
         </div>
 
         <modal name="errors-modal" width="50%" height="auto" class="shadow-lg">
@@ -95,6 +109,7 @@
       return {
         initialStandUpData: {},
         standUpData: {},
+        activeTab: 'questions',
         showEditNameInput: false,
         showColorPicker: false,
         showNewQuestionInput: false,
@@ -187,18 +202,16 @@
       }
     },
     mounted() {
-      if(this.$route.params.id !== 'new') {
+      if(this.$route.params.id !== 'new') { 
         // get workspace members
         if(this.$store.getters.getWorkspaceMembers.length) {
           this.workspaceMembers = this.$store.getters.getWorkspaceMembers;
-          console.log('1 ', this.workspaceMembers);
         } else {
           this.$loading(true);
           this.$store.dispatch('GET_WORKSPACE_MEMBERS', this.$route.params.id)
             .then( () => {
               this.workspaceMembers = this.$store.getters.getWorkspaceMembers;
               this.$loading(false);
-              console.log('2 ', this.workspaceMembers);
             });
         }
         if(this.$store.getters.getStandUpConfigs.length) {
