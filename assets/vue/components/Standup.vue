@@ -89,6 +89,7 @@
         },
         edited: false,
         dataLoaded: false,
+        workspaceMembers: []
       }
     },
     methods: {
@@ -149,6 +150,19 @@
     },
     mounted() {
       if(this.$route.params.id !== 'new') {
+        // get workspace members
+        if(this.$store.getters.getWorkspaceMembers.length) {
+          this.workspaceMembers = this.$store.getters.getWorkspaceMembers;
+          console.log('1 ', this.workspaceMembers);
+        } else {
+          this.$loading(true);
+          this.$store.dispatch('GET_WORKSPACE_MEMBERS', this.$route.params.id)
+            .then( () => {
+              this.workspaceMembers = this.$store.getters.getWorkspaceMembers;
+              this.$loading(false);
+              console.log('2 ', this.workspaceMembers);
+            });
+        }
         if(this.$store.getters.getStandUpConfigs.length) {
           this.initialStandUpData = this.$store.getters.getStandUpConfigData(Number(this.$route.params.id));
           this.standUpData = this.lodash.cloneDeep(this.initialStandUpData);

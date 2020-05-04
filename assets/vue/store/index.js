@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: {},
-    standupConfigs: []
+    standupConfigs: [],
+    workspaceMembers: []
   },
   getters: {
     getUserData: state => {
@@ -18,6 +19,9 @@ export default new Vuex.Store({
     },
     getStandUpConfigData: (state) => (id)  => {
       return state.standupConfigs.find(config => config.id === id);
+    },
+    getWorkspaceMembers: state => {
+      return state.workspaceMembers;
     }
   },
   mutations: {
@@ -35,6 +39,9 @@ export default new Vuex.Store({
     deleteConfig (state, id) {
       let index = state.standupConfigs.findIndex( item => item.id === id);
       state.standupConfigs.splice(index, 1);
+    },
+    updateWorkspaceMembers(state, members) {
+      state.workspaceMembers = members;
     }
   },
   actions: {
@@ -42,6 +49,15 @@ export default new Vuex.Store({
       return axios.get('/api/configs')
         .then( (response) => {
           commit('standUpConfigs', response.data['hydra:member']);
+        })
+        .catch( (error) => {
+          console.log(error);
+        })
+    },
+    GET_WORKSPACE_MEMBERS({ commit }, id) {
+      return axios.get(`/api/configs/${id}/members`)
+        .then( (response) => {
+          commit('updateWorkspaceMembers', response.data);
         })
         .catch( (error) => {
           console.log(error);
