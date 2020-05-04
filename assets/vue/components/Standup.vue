@@ -29,7 +29,7 @@
                 </label>
             </div>
 
-            <div class="w-full flex space-x-6">
+            <div class="w-full flex space-x-6 mt-3">
                 <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-accentColor w-content cursor-pointer" @click="activeTab = 'questions'">Questions</h3>
                 <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-accentColor w-content cursor-pointer" @click="activeTab = 'members'">Members</h3>
             </div>
