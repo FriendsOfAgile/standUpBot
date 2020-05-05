@@ -27,7 +27,7 @@ class Member
 
     /**
      * @Groups({"member:write"})
-     * @ORM\ManyToOne(targetEntity="App\Entity\StandUpConfig", inversedBy="members", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\StandUpConfig", inversedBy="members", cascade={"persist","remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $config;
