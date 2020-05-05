@@ -31,8 +31,8 @@
 
 
             <div class="w-full flex space-x-6 mt-4">
-                <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-accentColor w-content cursor-pointer" @click="activeTab = 'questions'">Questions</h3>
-                <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-accentColor w-content cursor-pointer" @click="activeTab = 'members'">Members</h3>
+                <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-gray-400 transition duration-300 ease-in-out w-content cursor-pointer" :class="{'border-accentColor': activeTab === 'questions'}" @click="activeTab = 'questions'">Questions</h3>
+                <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-gray-400 transition duration-300 ease-in-out w-content cursor-pointer" :class="{'border-accentColor': activeTab === 'members'}" @click="activeTab = 'members'">Members</h3>
             </div>
 
             <transition name="component-fade" mode="out-in">
@@ -202,7 +202,7 @@
       }
     },
     mounted() {
-      if(this.$route.params.id !== 'new') { 
+      if(this.$route.params.id !== 'new') {
         // get workspace members
         if(this.$store.getters.getWorkspaceMembers.length) {
           this.workspaceMembers = this.$store.getters.getWorkspaceMembers;
