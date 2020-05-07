@@ -40,7 +40,7 @@
                     <div class="flex flex-col ">
                         <div class="w-full flex-flex-col" v-for="(question, index) in standUpData.questions" :key="question['@id']">
                             <div class="border-l-4 ml-4 mt-4 w-full flex items-center relative" :style="{'border-color': question.color}">
-                                <input class="ml-1 py-1 px-2 focus:outline-none" type="text" v-model="question.text" @input="compareConfig"/>
+                                <input class="ml-1 py-1 px-4 focus:outline-none" :style="{'width': ((question.text.length + 10) * 8) + 'px'}" type="text" v-model="question.text" @input="compareConfig" />
                                 <!--                             <input type="color" v-model="question.color" @change="compareConfig">-->
                                 <div style="width: 24px; height: 24px;" :style="{'background-color': question.color}" class="rounded cursor-pointer" @click="showColorPicker = index"></div>
                                 <transition name="fade">
@@ -168,8 +168,17 @@
         console.log(configData);
         this.errors = [];
         if(configData.questions.length && configData.messageBefore && configData.messageAfter) {
-          this.$modal.hide('errors-modal');
-          this.saveStandUpConfig(configData)
+          for(let question of configData.questions) {
+            if(!question.text.length) {
+              this.errors.push("Question can't be empty. Please enter some text before saving");
+            }
+          }
+          if(this.errors.length) {
+            this.$modal.show('errors-modal');
+          } else {
+            this.$modal.hide('errors-modal');
+            this.saveStandUpConfig(configData)
+          }
         } else {
           if(!configData.messageBefore) {
             this.errors.push('Please add Intro Message before saving.');
