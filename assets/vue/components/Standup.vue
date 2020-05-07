@@ -40,7 +40,7 @@
                     <div class="flex flex-col ">
                         <div class="w-full flex-flex-col" v-for="(question, index) in standUpData.questions" :key="question['@id']">
                             <div class="border-l-4 ml-4 mt-4 w-full flex items-center relative" :style="{'border-color': question.color}">
-                                <input class="ml-1 py-1 px-4 focus:outline-none" :style="{'width': ((question.text.length + 10) * 8) + 'px'}" type="text" v-model="question.text" @input="compareConfig" />
+                                <input class="ml-1 py-1 px-2 focus:outline-none question-input" :size="question.text.length" type="text" v-model="question.text" @input="compareConfig" />
                                 <!--                             <input type="color" v-model="question.color" @change="compareConfig">-->
                                 <div style="width: 24px; height: 24px;" :style="{'background-color': question.color}" class="rounded cursor-pointer" @click="showColorPicker = index"></div>
                                 <transition name="fade">
@@ -54,7 +54,7 @@
                         </div>
                         <transition name="component-fade" mode="out-in">
                             <div class="border-l-4 ml-4 mt-4 w-full flex items-center relative" :style="{'border-color': newQuestion.color}" v-if="showNewQuestionInput" @keyup.enter="addQuestionToConfig">
-                                <input class="ml-1 py-1 px-2 focus:outline-none" placeholder="Enter your question" ref="question" v-model="newQuestion.text" type="text" @input="compareConfig" @blur="addQuestionToConfig"/>
+                                <input class="ml-1 py-1 px-2 focus:outline-none question-input" :size="newQuestion.text.length" placeholder="Enter your question" ref="question" v-model="newQuestion.text" type="text" @input="compareConfig" @blur="addQuestionToConfig"/>
                                 <div style="width: 24px; height: 24px;" v-if="newQuestion.text" :style="{'background-color': newQuestion.color}" class="rounded cursor-pointer" @click="showColorPicker = 'newQuestion'"></div>
                                 <div class="color-picker-container p-2 z-max" v-if="showColorPicker === 'newQuestion'" @mouseleave="showColorPicker = false">
                                     <v-swatches v-model="newQuestion.color" @input="showColorPicker = false" popover-y="up" inline="true"/>
@@ -263,4 +263,7 @@
         left: 10em;
         max-width: 30%;
     }
+    /*.question-input {*/
+    /*    font-family: 'Roboto Mono', 'Rubik', sans-serif;*/
+    /*}*/
 </style>
