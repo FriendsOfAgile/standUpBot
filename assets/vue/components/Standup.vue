@@ -170,7 +170,7 @@
         if(configData.questions.length && configData.messageBefore && configData.messageAfter) {
           for(let question of configData.questions) {
             if(!question.text.length) {
-              this.errors.push("Question can't be empty. Please enter some text before saving");
+              this.errors.push("Question can't be empty. Please enter some text before saving.");
             }
           }
           if(this.errors.length) {
