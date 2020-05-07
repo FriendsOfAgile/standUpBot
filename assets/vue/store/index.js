@@ -54,8 +54,8 @@ export default new Vuex.Store({
           console.log(error);
         })
     },
-    GET_WORKSPACE_MEMBERS({ commit }, id) {
-      return axios.get(`/api/configs/${id}/members`)
+    GET_WORKSPACE_MEMBERS({ commit }) {
+      return axios.get(`/api/members`)
         .then( (response) => {
           commit('updateWorkspaceMembers', response.data);
         })

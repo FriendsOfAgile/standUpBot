@@ -208,7 +208,7 @@
           this.workspaceMembers = this.$store.getters.getWorkspaceMembers;
         } else {
           this.$loading(true);
-          this.$store.dispatch('GET_WORKSPACE_MEMBERS', this.$route.params.id)
+          this.$store.dispatch('GET_WORKSPACE_MEMBERS')
             .then( () => {
               this.workspaceMembers = this.$store.getters.getWorkspaceMembers;
               this.$loading(false);
