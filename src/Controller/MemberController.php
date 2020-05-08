@@ -12,6 +12,7 @@ namespace App\Controller;
 use App\Entity\StandUpConfig;
 use App\Repository\StandUpConfigRepository;
 use App\Service\ScheduleService;
+use App\Service\SlackService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -22,7 +23,7 @@ class MemberController extends AbstractController
      * @param StandUpConfigRepository $repository
      * @param ScheduleService $service
      */
-    public function test(StandUpConfigRepository $repository, ScheduleService $service)
+    public function test(StandUpConfigRepository $repository, ScheduleService $service, SlackService $slack)
     {
         $list = $repository->findAll();
         /** @var StandUpConfig $config */
@@ -39,11 +40,15 @@ class MemberController extends AbstractController
         ));
 
         $service->setConfig($config);
-        dump($config->getId());
-        dump($service->isDayToStandUp());
-        dump($service->isTimeToStandUp());
-        dump($service->getUsersToStandUp());
+//        dump($config->getId());
+//        dump($service->isDayToStandUp());
+//        dump($service->isTimeToStandUp());
+//        dump($service->getUsersToStandUp());
 
+        $me = current($service->getUsersToStandUp());
+        dump($me);
+
+        $slack->postMessage($me, 'Hey');
         die;
     }
 }
