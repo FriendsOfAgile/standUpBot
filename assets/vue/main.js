@@ -13,19 +13,9 @@ import '../css/tailwind.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faCogs } from '@fortawesome/free-solid-svg-icons'
-import { faChartPie } from '@fortawesome/free-solid-svg-icons'
-import { faEdit } from '@fortawesome/free-solid-svg-icons'
-import { faCheck } from '@fortawesome/free-solid-svg-icons'
-import { faSave } from '@fortawesome/free-solid-svg-icons'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import {faCogs, faEyeDropper, faChartPie, faEdit, faCheck, faSave, faPlus, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 
-library.add(faCogs)
-library.add(faChartPie)
-library.add(faEdit)
-library.add(faCheck)
-library.add(faSave)
-library.add(faPlus)
+library.add(faCogs, faChartPie, faEdit, faCheck, faSave, faPlus, faEyeDropper, faTrashAlt);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
