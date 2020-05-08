@@ -41,4 +41,31 @@ class StandUpConfigResourceTest extends CustomApiTestCase
         $this->assertEquals($config1->getName(), current($result1['hydra:member'])['name']);
         $this->assertEquals($config2->getName(), current($result2['hydra:member'])['name']);
     }
+
+    /**
+     * @test
+     */
+    public function user_can_see_space_configs()
+    {
+        $em = $this->getEntityManager();
+
+        $user1 = $this->createUser('user1@test.com', 'slack', 'user1test');
+        $user2 = $this->createUser('user2@test.com', 'slack', 'user2test');
+
+        $space = $user1->getSpace();
+        $user2->setSpace($space);
+
+        $em->persist($user2);
+        $em->flush();
+
+        $config = $this->createConfig($user1, 'Test Config');
+
+        $this->logIn($user2, 'user2test');
+
+        $response = $this->client->request('GET', '/api/configs');
+        $result = $response->toArray();
+
+        $this->assertEquals(1, $result['hydra:totalItems']);
+        $this->assertEquals($config->getName(), current($result['hydra:member'])['name']);
+    }
 }
