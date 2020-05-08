@@ -8,6 +8,7 @@ use App\Entity\Space;
 use App\Entity\StandUpDelay;
 use App\Service\ScheduleService;
 use App\Service\SlackService;
+use App\Service\StandUpService;
 use App\Traits\LoggerTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -25,16 +26,16 @@ class StandUpCommand extends Command
 
     private $em;
     /**
-     * @var SlackService
+     * @var StandUpService
      */
-    private $slack;
+    private $standUp;
 
-    public function __construct(?string $name = null, ScheduleService $service, EntityManagerInterface $em, SlackService $slack)
+    public function __construct(?string $name = null, ScheduleService $service, EntityManagerInterface $em, StandUpService $standUp)
     {
         parent::__construct($name);
         $this->service = $service;
         $this->em = $em;
-        $this->slack = $slack;
+        $this->standUp = $standUp;
     }
 
     protected function configure()
@@ -47,41 +48,26 @@ class StandUpCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+        $io->text(sprintf('Current time is %s', (new \DateTime())->format('Y-m-d H:i:s')));
 
         $spaces = $this->em->getRepository(Space::class)->findAll();
-        $io->text(sprintf('Current time is %s', (new \DateTime())->format('Y-m-d H:i:s')));
+
         /** @var Space $space */
-        $this->slack->setAccessToken($_ENV['SLACK_BOT_TOKEN']);
         foreach ($spaces as $space) {
+
             $configs = $space->getStandUpConfigs();
             $io->text(sprintf('Checking %s space. Found %d configs', $space->getName(), $configs->count()));
+
             foreach ($configs as $config) {
                 $this->service->setConfig($config);
                 $users = $this->service->getUsersToStandUp();
-                if (count($users)) {
+                if (!empty($users)) {
+
                     $io->text(sprintf('Found %d users to stand-up', count($users)));
+
                     foreach ($users as $user) {
-                        if ($io->ask(sprintf('Do you want to send message to %s', $user->getName()), 'yes') == 'yes') {
-                            //Отправляем welcome
-                            if ($config->getMessageBefore())
-                                $this->slack->postMessage($user, $config->getMessageBefore());
-                            //Отправляем первый вопрос
-                            /** @var Question $question */
-                            if($question = $config->getQuestions()->first())
-                                $this->slack->postMessage($user, $question);
-                            //Заносим в Delay-лист
-                            $delay = new StandUpDelay();
-                            $delay->setConfig($config)
-                                ->setUser($user);
-
-                            $state = new ChatState();
-                            $state->setUser($user)
-                                ->setQuestion($question->getText())
-                                ->setNextQuestion($config->getQuestions()->next());
-
-                            $this->em->persist($state);
-                            $this->em->persist($delay);
-                            $this->em->flush();
+                        if ($io->confirm(sprintf('Do you want to send message to %s', $user->getName()))) {
+                            $this->standUp->startStandUp($user, $config);
                         }
                     }
                 }

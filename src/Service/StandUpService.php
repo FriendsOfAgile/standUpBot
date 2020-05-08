@@ -13,8 +13,10 @@ use App\Entity\Answer;
 use App\Entity\ChatState;
 use App\Entity\StandUp;
 use App\Entity\StandUpConfig;
+use App\Entity\StandUpDelay;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Runner\Exception;
 
 class StandUpService
 {
@@ -39,43 +41,45 @@ class StandUpService
      * @param User $user
      * @param StandUpConfig $config
      * @return bool
+     * @throws \Exception
      */
     public function startStandUp(User $user, StandUpConfig $config): bool
     {
-        try {
-            if ($config->getQuestions()->count() <= 0) {
-                return false;
-            }
-
-            if ($welcome = $config->getMessageBefore()) {
-                $this->slack->postMessage($user, $welcome);
-            }
-
-            $state = new ChatState();
-
-            $questions = array();
-            foreach ($config->getQuestions() as $question) {
-                $questions[] = array(
-                    'color' => $question->getColor(),
-                    'text' => $question->getText()
-                );
-            }
-
-            $state->setQuestions($questions)
-                ->setConfig($config)
-                ->setUser($user);
-
-            $currentQuestion = current($questions);
-            $this->slack->postMessage($user, $currentQuestion['text']);
-
-            $this->em->persist($state);
-            $this->em->flush();
-
-            return true;
-        } catch (\Exception $e) {
-
+        if ($config->getQuestions()->count() <= 0) {
+            throw new \Exception('There is no questions');
         }
-        return false;
+
+        if ($welcome = $config->getMessageBefore()) {
+            $this->slack->postMessage($user, $welcome);
+        }
+
+        $state = new ChatState();
+
+        $questions = array();
+        foreach ($config->getQuestions() as $question) {
+            $questions[] = array(
+                'color' => $question->getColor(),
+                'text' => $question->getText()
+            );
+        }
+
+        $state->setQuestions($questions)
+            ->setConfig($config)
+            ->setUser($user);
+
+        $currentQuestion = current($questions);
+        $this->slack->postMessage($user, $currentQuestion['text']);
+
+        $delay = new StandUpDelay();
+        $delay->setConfig($config)
+            ->setUser($user);
+
+
+        $this->em->persist($delay);
+        $this->em->persist($state);
+        $this->em->flush();
+
+        return true;
     }
 
     /**
@@ -84,42 +88,40 @@ class StandUpService
      * @param User $user
      * @param string $text
      * @return bool
+     * @throws \Exception
      */
     public function processStandUp(User $user, string $text): bool
     {
-        try {
-            /** @var ChatState $state */
-            $state = $this->em->getRepository(ChatState::class)->findOneBy([
-                'user' => $user
-            ]);
+        /** @var ChatState $state */
+        $state = $this->em->getRepository(ChatState::class)->findOneBy([
+            'user' => $user
+        ]);
 
-            if (!$state) {
-                throw new \Exception('Unexpected message');
-            }
+        if (!$state) {
+            throw new \Exception('Unexpected message');
+        }
 
-            $answers = $state->getAnswers();
-            $questions = $state->getQuestions();
+        $answers = $state->getAnswers();
+        $questions = $state->getQuestions();
 
-            $question = array_shift($questions);
-            $question['answer'] = $text;
-            $answers[] = $question;
+        $question = array_shift($questions);
+        $question['answer'] = $text;
+        $answers[] = $question;
 
-            $state->setQuestions($questions)
-                ->setAnswers($answers);
+        $state->setQuestions($questions)
+            ->setAnswers($answers);
 
-            $this->em->persist($state);
+        $this->em->persist($state);
 
-            if (empty($questions)) {
-                $this->finishStandUp($user, $state);
-            } else {
-                $question = current($questions);
-                $this->slack->postMessage($user, $question['text']);
-            }
+        if (empty($questions)) {
+            $this->finishStandUp($user, $state);
+        } else {
+            $question = current($questions);
+            $this->slack->postMessage($user, $question['text']);
+        }
 
-            $this->em->flush();
-            return true;
-        } catch (\Exception $e) {}
-        return false;
+        $this->em->flush();
+        return true;
     }
 
     public function finishStandUp(User $user, ChatState $state)
