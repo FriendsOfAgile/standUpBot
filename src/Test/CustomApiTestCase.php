@@ -72,10 +72,13 @@ class CustomApiTestCase extends ApiTestCase
 
     protected function createConfig(User $user, string $name): StandUpConfig
     {
-        $standUpConfig = new StandUpConfig();
-        $standUpConfig->setName($name);
+        if (!$space = $user->getSpace())
+            throw new \Exception('User should have a space');
 
-        if (!$user->getSpace())
+        $standUpConfig = new StandUpConfig();
+        $standUpConfig->setName($name)
+            ->setSpace($space)
+            ->setAuthor($user);
 
         $em = $this->getEntityManager();
         $em->persist($standUpConfig);
