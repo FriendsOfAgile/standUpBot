@@ -101,7 +101,8 @@ class SlackService
     {
         $response = $this->get('chat.postMessage', array(
             'channel' => $user->getUid(),
-            'text' => $message
+            'text' => $message,
+            'as_user' => true
         ));
         return $response['ok'] ?? false;
     }

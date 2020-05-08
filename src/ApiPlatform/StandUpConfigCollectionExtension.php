@@ -38,7 +38,10 @@ class StandUpConfigCollectionExtension implements QueryCollectionExtensionInterf
         /** @var User $user */
         if ($user = $this->security->getUser()) {
             $rootAlias = $queryBuilder->getRootAliases()[0];
-            $queryBuilder->where(sprintf('%s.author = :user', $rootAlias))
+            $queryBuilder->join(sprintf('%s.space', $rootAlias), 'space')
+                ->join('space.users', 'user')
+                ->where(sprintf('%s.author = :user', $rootAlias))
+                ->orWhere('user = :user')
                 ->setParameter('user', $user);
         }
     }

@@ -50,6 +50,7 @@ class StandUp
     public function __construct()
     {
         $this->answers = new ArrayCollection();
+        $this->timestamp = new \DateTime();
     }
 
     public function getId(): ?int
