@@ -9,6 +9,8 @@
 namespace App\Controller;
 
 
+use App\Entity\ChatState;
+use App\Entity\Question;
 use App\Entity\StandUpConfig;
 use App\Repository\StandUpConfigRepository;
 use App\Service\ScheduleService;
@@ -45,10 +47,38 @@ class MemberController extends AbstractController
 //        dump($service->isTimeToStandUp());
 //        dump($service->getUsersToStandUp());
 
-        $me = current($service->getUsersToStandUp());
-        dump($me);
+        $me = null;
+        foreach($service->getUsersToStandUp() as $u) {
+            if ($u->getEmail() == 'i.zobenko@coral-club.com')
+                $me = $u;
+        }
+        $welcome = $config->getMessageBefore();
+        /** @var Question $question */
 
-        $slack->postMessage($me, 'Hey');
+        $state = new ChatState();
+
+        $questions = array();
+        foreach($config->getQuestions() as $question){
+            $questions[] = array(
+                'color' => $question->getColor(),
+                'text' => $question->getText()
+            );
+        }
+
+
+        $question = current($questions);
+
+        $state->setQuestions($questions)
+            ->setConfig($config)
+            ->setUser($me);
+
+        $manager = $this->getDoctrine()->getManager();
+        $manager->persist($state);
+        $manager->flush();
+
+        $slack->postMessage($me, $welcome);
+        $slack->postMessage($me, $question['text']);
+
         die;
     }
 }
