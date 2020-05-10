@@ -34,7 +34,7 @@
                 <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-gray-400 transition duration-300 ease-in-out w-content cursor-pointer" :class="{'border-accentColor': activeTab === 'questions'}" @click="activeTab = 'questions'">Questions</h3>
                 <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-gray-400 transition duration-300 ease-in-out w-content cursor-pointer" :class="{'border-accentColor': activeTab === 'members'}" @click="activeTab = 'members'">Members</h3>
             </div>
-            
+
                 <div class="flex flex-col p-1 mt-2" v-if="activeTab === 'questions'">
                     <div class="flex flex-col ">
                         <div class="w-full flex-flex-col space-y-1" v-for="(question, index) in standUpData.questions" :key="question['@id']">
@@ -73,11 +73,20 @@
                         <!-- Members -->
                     </div>
                     <div class="w-full" v-else>
-                        <h3 class="text-xl font-bold pb-6 text-gray-700">There are no members yet :( Type in username in field below and add some members to standup team!</h3>
-                        {{ searchMembersInput }}
+                        <h3 class="text-xl font-bold pb-6 text-gray-700">There are no members yet :( Type in username in field below and add some members to the standup team!</h3>
                         <label for="searchMembers" class="text-gray-500">Search members:
                             <input id="searchMembers" class="focus:outline-none w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" autofocus type="text" placeholder="Enter username" v-model="searchMembersInput">
                         </label>
+                        <button class="bg-gray-500 mt-4 focus:outline-none hover:bg-accentColor text-white text-sm font-bold py-2 px-4 rounded-full w-content" @click="membersFiltered = workspaceMembers" v-if="!membersFiltered.length">show all workspace members</button>
+                        <button class="bg-gray-500 mt-4 focus:outline-none hover:bg-accentColor text-white text-sm font-bold py-2 px-4 rounded-full w-content" @click="membersFiltered = []" v-else >hide all workspace members</button>
+                        <div class="w-full grid grid-cols-4 gap-4 mt-4">
+                            <div class="p-4 flex flex-col items-center justify-center" v-for="member in membersFiltered">
+                                <img class="w-auto m-auto rounded-full" :src="member.avatar"/>
+                                <div class="w-full text-center mt-4 text-2xl">
+                                    {{ member.name }}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -125,6 +134,7 @@
         dataLoaded: false,
         workspaceMembers: [],
         searchMembersInput: "",
+        membersFiltered: [],
         errors: [],
       }
     },
@@ -200,6 +210,12 @@
       closeErrorsModal() {
         this.errors = [];
         this.$modal.hide('errors-modal');
+      },
+      getMemberFromWorkSpace(data, type) {
+        if(type === 'byName') {
+          let username = data;
+          this.membersFiltered = this.workspaceMembers.filter( (item) => item.name.toLowerCase().includes(username.toLowerCase()));
+        }
       }
     },
     computed: {
@@ -254,6 +270,12 @@
         this.dataLoaded = true;
       }
     },
+
+    watch: {
+      searchMembersInput(username) {
+        this.getMemberFromWorkSpace(username, 'byName');
+      }
+    }
   }
 </script>
 
