@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full flex flex-col pb-12">
+    <div class="w-full flex flex-col pb-12 ">
         <div class="flex justify-between px-6 pt-6">
             <h3 v-if="!showEditNameInput" class="font-bold text-2xl text-gray-700 cursor-pointer" @click="showEditNameInput = true, focusInput('standupName')"><span class="font-normal">Standup</span> {{ getStandUpName }}</h3>
             <input v-if="showEditNameInput" ref="standupName" class="focus:outline-none w-3/4 text-gray-700 px-3 text-2xl font-bold" type="text" v-model="standUpData.name" @input="compareConfig" @keyup.enter="showEditNameInput = false" @blur="showEditNameInput = false">
