@@ -1,5 +1,5 @@
 <template>
-    <div class="px-6 py-4 h-fullVh shadow-xl space-y-6 flex flex-col items-center">
+    <div class="px-6 py-4 shadow-xl space-y-6 flex flex-col items-center">
         <router-link to="/">
             <img class="rounded-full" :src="userAvatar" />
         </router-link>
