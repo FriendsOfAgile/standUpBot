@@ -79,14 +79,16 @@
                         </label>
                         <button class="bg-gray-500 mt-4 focus:outline-none hover:bg-accentColor text-white text-sm font-bold py-2 px-4 rounded-full w-content" @click="membersFiltered = workspaceMembers" v-if="!membersFiltered.length">show all workspace members</button>
                         <button class="bg-gray-500 mt-4 focus:outline-none hover:bg-accentColor text-white text-sm font-bold py-2 px-4 rounded-full w-content" @click="membersFiltered = []" v-else >hide all workspace members</button>
-                        <div class="w-full grid grid-cols-4 gap-4 mt-4">
-                            <div class="p-4 flex flex-col items-center justify-center" v-for="member in membersFiltered">
-                                <img class="w-auto m-auto rounded-full" :src="member.avatar"/>
-                                <div class="w-full text-center mt-4 text-2xl">
-                                    {{ member.name }}
+                        <transition name="component-fade" mode="out-in">
+                            <div class="w-full grid grid-cols-4 gap-4 mt-4" v-if="membersFiltered.length">
+                                <div class="p-4 flex flex-col items-center justify-center cursor-pointer transition duration-300 ease-in-out hover:shadow-lg" v-for="member in membersFiltered">
+                                    <img class="w-auto m-auto rounded-full" :src="member.avatar"/>
+                                    <div class="w-full text-center mt-4 text-2xl">
+                                        {{ member.name }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </transition>
                     </div>
                 </div>
 
