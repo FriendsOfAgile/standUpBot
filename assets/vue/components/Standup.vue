@@ -34,8 +34,7 @@
                 <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-gray-400 transition duration-300 ease-in-out w-content cursor-pointer" :class="{'border-accentColor': activeTab === 'questions'}" @click="activeTab = 'questions'">Questions</h3>
                 <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-gray-400 transition duration-300 ease-in-out w-content cursor-pointer" :class="{'border-accentColor': activeTab === 'members'}" @click="activeTab = 'members'">Members</h3>
             </div>
-
-            <transition name="component-fade" mode="out-in">
+            
                 <div class="flex flex-col p-1 mt-2" v-if="activeTab === 'questions'">
                     <div class="flex flex-col ">
                         <div class="w-full flex-flex-col space-y-1" v-for="(question, index) in standUpData.questions" :key="question['@id']">
@@ -66,13 +65,22 @@
                         </div>
                     </div>
                 </div>
-            </transition>
 
-            <transition name="component-fade" mode="out-in">
+
+
                 <div class="flex flex-col p-1 mt-2" v-if="activeTab === 'members'">
-                    {{ workspaceMembers }}
+                    <div class="w-full" v-if="standUpData.members.length">
+                        <!-- Members -->
+                    </div>
+                    <div class="w-full" v-else>
+                        <h3 class="text-xl font-bold pb-6 text-gray-700">There are no members yet :( Type in username in field below and add some members to standup team!</h3>
+                        {{ searchMembersInput }}
+                        <label for="searchMembers" class="text-gray-500">Search members:
+                            <input id="searchMembers" class="focus:outline-none w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" autofocus type="text" placeholder="Enter username" v-model="searchMembersInput">
+                        </label>
+                    </div>
                 </div>
-            </transition>
+
 
         </div>
 
@@ -116,6 +124,7 @@
         edited: false,
         dataLoaded: false,
         workspaceMembers: [],
+        searchMembersInput: "",
         errors: [],
       }
     },
