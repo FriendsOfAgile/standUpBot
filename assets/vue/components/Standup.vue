@@ -38,11 +38,11 @@
             <transition name="component-fade" mode="out-in">
                 <div class="flex flex-col p-1 mt-2" v-if="activeTab === 'questions'">
                     <div class="flex flex-col ">
-                        <div class="w-full flex-flex-col" v-for="(question, index) in standUpData.questions" :key="question['@id']">
-                            <div class="mt-4 w-full flex items-center relative space-x-3">
+                        <div class="w-full flex-flex-col space-y-1" v-for="(question, index) in standUpData.questions" :key="question['@id']">
+                            <div class="mt-4 w-full flex items-center relative">
                                 <font-awesome-icon icon="trash-alt" class="text-red-400 mr-1 cursor-pointer text-xl" @click="deleteQuestion(index)"/>
-                                <font-awesome-icon icon="eye-dropper" class="text-xl mr-4 text-gray-500 cursor-pointer" @click="showColorPicker = index"/>
-                                <input class="border-l-4  py-1 px-2 focus:outline-none w-full" type="text" :style="{'border-color': question.color}" v-model="question.text" @input="compareConfig" />
+                                <font-awesome-icon icon="eye-dropper" class="ml-4 text-xl mr-4 text-gray-500 cursor-pointer" @click="showColorPicker = index"/>
+                                <input class="ml-2 border-l-8 px-3 focus:outline-none w-full" type="text" :style="{'border-color': question.color}" v-model="question.text" @input="compareConfig" />
                                 <transition name="fade">
                                     <div class="color-picker-container p-2 z-max" v-if="showColorPicker === index" @mouseleave="showColorPicker = false">
                                         <v-swatches v-model="question.color" @input="compareConfig(), showColorPicker = false" popover-y="up" inline="true"/>
@@ -51,10 +51,10 @@
                             </div>
                         </div>
                         <transition name="component-fade" mode="out-in">
-                            <div class="mt-4 w-full flex items-center relative space-x-3" :style="{'border-color': newQuestion.color}" v-if="showNewQuestionInput" @keyup.enter="addQuestionToConfig">
-                                <font-awesome-icon icon="check" v-if="newQuestion.text.length" class="text-xl text-green-500 cursor-pointer" @click="addQuestionToConfig"/>
-                                <font-awesome-icon icon="eye-dropper" v-if="newQuestion.text" class="text-xl ml-auto text-gray-500 cursor-pointer" @click="showColorPicker = 'newQuestion'"/>
-                                <input class="w-full border-l-4 py-1 px-2 focus:outline-none question-input"  :class="{'ml-1': newQuestion.text && newQuestion.text.length}" placeholder="Enter your question" ref="question" v-model="newQuestion.text" type="text" @input="compareConfig" @blur="addQuestionToConfig"/>
+                            <div class="mt-4 w-full flex items-center relative" :style="{'border-color': newQuestion.color}" v-if="showNewQuestionInput" @keyup.enter="addQuestionToConfig">
+                                <font-awesome-icon icon="check" v-if="newQuestion.text.length" class="text-xl mr-1 text-green-500 cursor-pointer" @click="addQuestionToConfig"/>
+                                <font-awesome-icon icon="eye-dropper" v-if="newQuestion.text" class="ml-4 text-xl mr-4 text-gray-500 cursor-pointer" @click="showColorPicker = 'newQuestion'"/>
+                                <input class="w-full border-l-8 px-3 focus:outline-none question-input"  :class="{'ml-1': newQuestion.text && newQuestion.text.length}" placeholder="Enter your question" ref="question" v-model="newQuestion.text" type="text" @input="compareConfig" @blur="addQuestionToConfig"/>
                                 <div class="color-picker-container p-2 z-max" v-if="showColorPicker === 'newQuestion'" @mouseleave="showColorPicker = false">
                                     <v-swatches v-model="newQuestion.color" @input="showColorPicker = false" popover-y="up" inline="true"/>
                                 </div>
