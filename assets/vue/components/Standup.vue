@@ -70,6 +70,7 @@
 
                 <div class="flex flex-col p-1 mt-2" v-if="activeTab === 'members'">
                     <div class="w-full" v-if="standUpData.members.length">
+                        {{ standUpData.members }}
                         <!-- Members -->
                     </div>
                     <div class="w-full" v-else>
@@ -77,14 +78,16 @@
                         <label for="searchMembers" class="text-gray-500">Search members:
                             <input id="searchMembers" class="focus:outline-none w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" autofocus type="text" placeholder="Enter username" v-model="searchMembersInput">
                         </label>
-                        <button class="bg-gray-500 mt-4 focus:outline-none hover:bg-accentColor text-white text-sm font-bold py-2 px-4 rounded-full w-content" @click="membersFiltered = workspaceMembers" v-if="!membersFiltered.length">show all workspace members</button>
-                        <button class="bg-gray-500 mt-4 focus:outline-none hover:bg-accentColor text-white text-sm font-bold py-2 px-4 rounded-full w-content" @click="membersFiltered = []" v-else >hide all workspace members</button>
+                        <button class="bg-gray-500 mt-4 focus:outline-none hover:bg-accentColor text-white text-sm font-bold py-2 px-4 w-content" @click="membersFiltered = workspaceMembers" v-if="!membersFiltered.length">show all workspace members</button>
+                        <button class="bg-gray-500 mt-4 focus:outline-none hover:bg-accentColor text-white text-sm font-bold py-2 px-4 w-content" @click="membersFiltered = []" v-else >hide all workspace members</button>
                         <transition name="component-fade" mode="out-in">
-                            <div class="w-full grid grid-cols-4 gap-4 mt-4" v-if="membersFiltered.length">
-                                <div class="p-4 flex flex-col items-center justify-center cursor-pointer transition duration-300 ease-in-out hover:shadow-lg" v-for="member in membersFiltered">
-                                    <img class="w-auto m-auto rounded-full" :src="member.avatar"/>
-                                    <div class="w-full text-center mt-4 text-2xl">
-                                        {{ member.name }}
+                            <div class="w-full grid grid-cols-6 gap-4 mt-4" v-if="membersFiltered.length">
+                                <div class="p-4 flex flex-col justify-center items-center cursor-pointer transition duration-300 ease-in-out hover:shadow-lg" v-for="member in membersFiltered" :key="member.name">
+                                    <div @click="addMemberToConfig(member)">
+                                        <img class="w-auto m-auto rounded-full" :src="member.avatar"/>
+                                        <div class="w-full text-center mt-4 text-lg">
+                                            {{ member.name }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -164,6 +167,10 @@
       deleteQuestion(index) {
         this.standUpData.questions.splice(index, 1);
         this.compareConfig();
+      },
+      addMemberToConfig(data) {
+       this.standUpData.members.push(data);
+        console.log(this.standUpData.members);
       },
       saveStandUpConfig(configData) {
         this.$loading(true);
