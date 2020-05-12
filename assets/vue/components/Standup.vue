@@ -73,7 +73,7 @@
                         {{ standUpData.members }}
                         <!-- Members -->
                     </div>
-                    <div class="w-full" v-else>
+                    <div class="w-full">
                         <h3 class="text-xl font-bold pb-6 text-gray-700">There are no members yet :( Type in username in field below and add some members to the standup team!</h3>
                         <label for="searchMembers" class="text-gray-500">Search members:
                             <input id="searchMembers" class="focus:outline-none w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" autofocus type="text" placeholder="Enter username" v-model="searchMembersInput">
@@ -169,9 +169,16 @@
         this.compareConfig();
       },
       addMemberToConfig(data) {
-       this.standUpData.members.push(data);
-       this.compareConfig();
-        console.log(this.standUpData.members);
+        console.log('addMember: ', data);
+        const member = {
+          config: this.standUpData["@id"],
+          uid: data.uid,
+          "canRead": true,
+          "canWrite": true,
+          "canEdit": false,
+        };
+       // this.$loading(true);
+       return this.$store.dispatch('ADD_MEMBER_TO_CONFIG', member)
       },
       saveStandUpConfig(configData) {
         this.$loading(true);

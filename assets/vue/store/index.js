@@ -42,6 +42,9 @@ export default new Vuex.Store({
     },
     updateWorkspaceMembers(state, members) {
       state.workspaceMembers = members;
+    },
+    addMemberToConfig(response) {
+      console.log('response blia ', response)
     }
   },
   actions: {
@@ -93,6 +96,15 @@ export default new Vuex.Store({
     DELETE_STANDUP_CONFIG({ commit }, id) {
       return axios.delete(`/api/configs/${id}`).then( () => {
         commit('deleteConfig', id);
+      }).catch( (error) => {
+        console.log(error);
+      })
+    },
+    ADD_MEMBER_TO_CONFIG( { commit }, member) {
+      console.log('member ', member);
+      return axios.post("/api/members", member).then ( (response) => {
+        console.log('response addMember ', response);
+        commit('addMemberToConfig', response)
       }).catch( (error) => {
         console.log(error);
       })
