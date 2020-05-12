@@ -18,9 +18,7 @@ class SlackController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         $action = $data['event']['type'] ?? ($data['type'] ?? null);
-
-        $logger->debug('Got new event from Slack', $data);
-
+        
         if (!isset($data['event']['bot_profile'])) {
             switch ($action) {
                 case 'url_verification':
@@ -39,7 +37,9 @@ class SlackController extends AbstractController
 
                     try {
                         $service->processStandUp($user, $text);
-                    } catch (\Exception $e) {}
+                    } catch (\Exception $e) {
+                        $logger->emergency('Exception on new event', ['message' => $e->getMessage(), 'request' => $data]);
+                    }
                     break;
                 default:
                     $logger->alert('Unknown event type', $data);

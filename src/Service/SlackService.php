@@ -167,15 +167,21 @@ class SlackService
         $target = $standUp->getConfig()->getChannel() ?
             $standUp->getConfig()->getChannel()->getCode() : $user->getUid();
 
-        $response = $this->get('chat.postMessage', array(
+        $params = array(
             'channel' => $target,
             'text' => sprintf('%s posted update for %s stand-up', $user->getName(), $standUp->getConfig()->getName()),
             'as_user' => false,
             'icon_url' => $user->getAvatar(),
             'username' => $user->getName(),
             'attachments' => json_encode($blocks, JSON_UNESCAPED_SLASHES)
-        ));
-        return $response['ok'] ?? false;
+        );
+
+        $response = $this->get('chat.postMessage', $params);
+        if (!$result = $response['ok'] ?? false)
+            $this->logger->error('Error on card post', array(
+                'params' => $params
+            ));
+        return $result;
     }
 
     /**
@@ -217,8 +223,9 @@ class SlackService
 
         $response = $client->request($method, $endpoint, $options);
         $response = json_decode($response->getBody()->getContents(), true);
-        if (!is_array($response) || $response['ok'] === false)
+        if (!is_array($response) || $response['ok'] === false) {
             return null;
+        }
 
         return $response;
     }
