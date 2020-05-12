@@ -9,6 +9,7 @@
 namespace App\Service;
 
 
+use App\Entity\Channel;
 use App\Entity\User;
 use App\Traits\LoggerTrait;
 use GuzzleHttp\Client;
@@ -40,6 +41,7 @@ class SlackService
     /**
      * @param string|null $teamId
      * @return array|null
+     * @throws \Exception
      */
     public function getTeamInfo(string $teamId = null)
     {
@@ -51,6 +53,7 @@ class SlackService
 
     /**
      * @return array|null
+     * @throws \Exception
      */
     public function getUsers(): ?array
     {
@@ -73,8 +76,31 @@ class SlackService
     }
 
     /**
+     * @return Channel[]|null
+     * @throws \Exception
+     */
+    public function listChannels(): ?array
+    {
+        $response = $this->get('channels.list');
+        if (!$response['ok'])
+            return null;
+        $result = array();
+
+        foreach ($response['channels'] as $item) {
+            $result[] = array(
+                'code' => $item['id'],
+                'name' => $item['name'],
+                'type' => 'slack'
+            );
+        }
+
+        return $result;
+    }
+
+    /**
      * @param string $uid
      * @return array|null
+     * @throws \Exception
      */
     public function getUser(string $uid): ?array
     {
@@ -97,6 +123,12 @@ class SlackService
         return $result;
     }
 
+    /**
+     * @param User $user
+     * @param string $message
+     * @return bool
+     * @throws \Exception
+     */
     public function postMessage(User $user, string $message): bool
     {
         $response = $this->get('chat.postMessage', array(
@@ -107,6 +139,13 @@ class SlackService
         return $response['ok'] ?? false;
     }
 
+    /**
+     * @param string $endpoint
+     * @param string $method
+     * @param array $data
+     * @return array|null
+     * @throws \Exception
+     */
     protected function request(string $endpoint, string $method = 'GET', array $data = array()): ?array
     {
         if (!$this->accessToken)
@@ -145,11 +184,23 @@ class SlackService
         return $response;
     }
 
+    /**
+     * @param string $endpoint
+     * @param array $query
+     * @return array|null
+     * @throws \Exception
+     */
     protected function get(string $endpoint, array $query = array()): ?array
     {
         return $this->request($endpoint, 'GET', $query);
     }
 
+    /**
+     * @param string $endpoint
+     * @param array $data
+     * @return array|null
+     * @throws \Exception
+     */
     protected function post(string $endpoint, array $data): ?array
     {
         return $this->request($endpoint, 'POST', $data);

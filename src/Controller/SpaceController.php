@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Space;
 use App\Entity\User;
 use App\Service\SlackService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +17,26 @@ class SpaceController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $service->setAccessToken($user->getSpace()->getToken());
-        $list = $service->getUsers();
-        return $this->json($list);
+        try {
+            $list = $service->getUsers();
+            return $this->json($list);
+        } catch (\Exception $e) {}
+
+        return $this->json(['status' => 'error'], 500);
+    }
+
+    /**
+     * @Route("/api/channels", methods={"GET"})
+     */
+    public function channels(SlackService $service)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $service->setAccessToken($user->getSpace()->getToken());
+        try {
+            $list = $service->listChannels();
+            return $this->json($list);
+        } catch (\Exception $e) {}
+        return $this->json(['status' => 'error'], 500);
     }
 }

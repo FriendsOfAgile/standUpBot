@@ -35,7 +35,9 @@ class SlackController extends AbstractController
                         'uid' => $data['user']
                     ]);
 
-                    $service->processStandUp($user, $text);
+                    try {
+                        $service->processStandUp($user, $text);
+                    } catch (\Exception $e) {}
                     break;
             }
         }
