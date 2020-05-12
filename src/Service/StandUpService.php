@@ -15,6 +15,7 @@ use App\Entity\StandUp;
 use App\Entity\StandUpConfig;
 use App\Entity\StandUpDelay;
 use App\Entity\User;
+use App\Repository\ChatStateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class StandUpService
@@ -52,7 +53,11 @@ class StandUpService
             $this->slack->postMessage($user, $welcome);
         }
 
-        $state = new ChatState();
+        /** @var ChatStateRepository $stateRepository */
+        $stateRepository = $this->em->getRepository(ChatState::class);
+
+        if (!$state = $stateRepository->getCurrentState($user, $config))
+            $state = new ChatState();
 
         $questions = array();
         foreach ($config->getQuestions() as $question) {

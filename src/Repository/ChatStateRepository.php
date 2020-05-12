@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\ChatState;
+use App\Entity\StandUpConfig;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,22 +21,31 @@ class ChatStateRepository extends ServiceEntityRepository
         parent::__construct($registry, ChatState::class);
     }
 
-    // /**
-    //  * @return ChatState[] Returns an array of ChatState objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param User $user
+     * @param StandUpConfig $config
+     * @return ChatState|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getCurrentState(User $user, StandUpConfig $config): ?ChatState
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        $today = new \DateTime();
+
+        $query = $this->createQueryBuilder('s');
+        return $query
+            ->where('s.user = :user')
+            ->andWhere('s.config = :config')
+            ->andWhere($query->expr()->between('s.timestamp', ':dateFrom', ':dateTo'))
+            ->setParameters(array(
+                'user' => $user,
+                'config' => $config,
+                'dateFrom' => $today->format('Y-m-d 00:00:00'),
+                'dateTo' => $today->format('Y-m-d 23:59:59')
+            ))->getQuery()
+            ->getOneOrNullResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?ChatState

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Service\StandUpService;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,10 +14,12 @@ class SlackController extends AbstractController
     /**
      * @Route("/channels/slack/event", name="slack")
      */
-    public function event(Request $request, StandUpService $service)
+    public function event(Request $request, StandUpService $service, LoggerInterface $logger)
     {
         $data = json_decode($request->getContent(), true);
         $action = $data['event']['type'] ?? ($data['type'] ?? null);
+
+        $logger->debug('Got new event from Slack', $data);
 
         if (!isset($data['event']['bot_profile'])) {
             switch ($action) {
@@ -24,7 +27,6 @@ class SlackController extends AbstractController
                     return $this->json([$data['challenge']]);
                     break;
                 case 'message':
-                default:
                     if (!isset($data['event']['user']))
                         break;
                     $data = $data['event'];
@@ -38,6 +40,9 @@ class SlackController extends AbstractController
                     try {
                         $service->processStandUp($user, $text);
                     } catch (\Exception $e) {}
+                    break;
+                default:
+                    $logger->alert('Unknown event type', $data);
                     break;
             }
         }
