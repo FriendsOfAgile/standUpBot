@@ -10,6 +10,7 @@ namespace App\Service;
 
 
 use App\Entity\Channel;
+use App\Entity\StandUp;
 use App\Entity\User;
 use App\Traits\LoggerTrait;
 use GuzzleHttp\Client;
@@ -135,6 +136,44 @@ class SlackService
             'channel' => $user->getUid(),
             'text' => $message,
             'as_user' => true
+        ));
+        return $response['ok'] ?? false;
+    }
+
+    /**
+     * @param StandUp $standUp
+     * @return bool
+     * @throws \Exception
+     */
+    public function postStandUp(StandUp $standUp): bool
+    {
+        $user = $standUp->getUser();
+
+        $blocks = array();
+        foreach($standUp->getAnswers() as $answer) {
+            $text = sprintf("*%s*\n%s", $answer->getQuestion(), $answer->getAnswer());
+            $blocks[] = array(
+                'color' => $answer->getColor() == 'gray' || !$answer->getColor() ? '#c0c0c0' : $answer->getColor(),
+                'blocks' => array([
+                    'type' => 'section',
+                    'text' => array(
+                        'type' => 'mrkdwn',
+                        'text' => $text
+                    )
+                ])
+            );
+        }
+
+        $target = $standUp->getConfig()->getChannel() ?
+            $standUp->getConfig()->getChannel()->getCode() : $user->getUid();
+
+        $response = $this->get('chat.postMessage', array(
+            'channel' => $target,
+            'text' => sprintf('%s posted update for %s stand-up', $user->getName(), $standUp->getConfig()->getName()),
+            'as_user' => false,
+            'icon_url' => $user->getAvatar(),
+            'username' => $user->getName(),
+            'attachments' => json_encode($blocks, JSON_UNESCAPED_SLASHES)
         ));
         return $response['ok'] ?? false;
     }

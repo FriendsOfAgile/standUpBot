@@ -16,7 +16,6 @@ use App\Entity\StandUpConfig;
 use App\Entity\StandUpDelay;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Runner\Exception;
 
 class StandUpService
 {
@@ -124,6 +123,11 @@ class StandUpService
         return true;
     }
 
+    /**
+     * @param User $user
+     * @param ChatState $state
+     * @throws \Exception
+     */
     public function finishStandUp(User $user, ChatState $state)
     {
         if ($last = $state->getConfig()->getMessageAfter())
@@ -142,6 +146,9 @@ class StandUpService
             $standUp->addAnswer($a);
             $this->em->persist($a);
         }
+
+        $this->slack->postStandUp($standUp);
+
         $this->em->remove($state);
         $this->em->flush();
     }
