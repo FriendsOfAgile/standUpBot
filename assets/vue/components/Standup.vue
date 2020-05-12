@@ -170,6 +170,7 @@
       },
       addMemberToConfig(data) {
        this.standUpData.members.push(data);
+       this.compareConfig();
         console.log(this.standUpData.members);
       },
       saveStandUpConfig(configData) {
