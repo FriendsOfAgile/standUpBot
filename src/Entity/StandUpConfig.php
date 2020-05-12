@@ -91,6 +91,12 @@ class StandUpConfig
      */
     private $standUps;
 
+    /**
+     * @Groups({"config:write","config:read"})
+     * @ORM\ManyToOne(targetEntity=Channel::class, cascade={"persist"})
+     */
+    private $channel;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
@@ -276,5 +282,17 @@ class StandUpConfig
     public function __toString()
     {
         return $this->getId().'. '.$this->getName() ?? 'Unnamed';
+    }
+
+    public function getChannel(): ?Channel
+    {
+        return $this->channel;
+    }
+
+    public function setChannel(?Channel $channel): self
+    {
+        $this->channel = $channel;
+
+        return $this;
     }
 }

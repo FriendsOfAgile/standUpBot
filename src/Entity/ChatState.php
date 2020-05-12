@@ -23,16 +23,6 @@ class ChatState
     private $user;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $question;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Question")
-     */
-    private $nextQuestion;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $timestamp;
@@ -44,9 +34,15 @@ class ChatState
     private $config;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\StandUp")
+     * @ORM\Column(type="array", nullable=true)
      */
-    private $standup;
+    private $questions = [];
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $answers = [];
+
 
     public function __construct()
     {
@@ -66,30 +62,6 @@ class ChatState
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getQuestion(): ?string
-    {
-        return $this->question;
-    }
-
-    public function setQuestion(string $question): self
-    {
-        $this->question = $question;
-
-        return $this;
-    }
-
-    public function getNextQuestion(): ?Question
-    {
-        return $this->nextQuestion;
-    }
-
-    public function setNextQuestion(?Question $nextQuestion): self
-    {
-        $this->nextQuestion = $nextQuestion;
 
         return $this;
     }
@@ -118,14 +90,26 @@ class ChatState
         return $this;
     }
 
-    public function getStandup(): ?StandUp
+    public function getQuestions(): ?array
     {
-        return $this->standup;
+        return $this->questions;
     }
 
-    public function setStandup(?StandUp $standup): self
+    public function setQuestions(?array $questions): self
     {
-        $this->standup = $standup;
+        $this->questions = $questions;
+
+        return $this;
+    }
+
+    public function getAnswers(): ?array
+    {
+        return $this->answers;
+    }
+
+    public function setAnswers(?array $answers): self
+    {
+        $this->answers = $answers;
 
         return $this;
     }

@@ -46,3 +46,7 @@ easy_admin:
         Answer:
             label: "Answer"
             class: App\Entity\Answer
+
+        Schedule:
+            label: "Schedule"
+            class: App\Entity\Schedule

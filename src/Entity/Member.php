@@ -5,12 +5,18 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
  *     denormalizationContext={"groups"={"member:write"}},
- *     normalizationContext={"groups"={"member:read"}}
+ *     normalizationContext={"groups"={"member:read"}},
+ *     itemOperations={
+ *          "get",
+ *     },
+ *     collectionOperations={
+ *          "get",
+ *          "post"
+ *     },
  * )
  * @ORM\Entity(repositoryClass="App\Repository\MemberRepository")
  * @ORM\EntityListeners({"App\Doctrine\MemberEntityListener"})

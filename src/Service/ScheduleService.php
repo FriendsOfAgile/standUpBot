@@ -86,6 +86,9 @@ class ScheduleService
 
     public function isUserDelayed(User $user): bool
     {
+        if ($this->isUserGotTooManyRequests($user))
+            return true;
+
         /** @var StandUpDelayRepository $repository */
         $repository = $this->em->getRepository(StandUpDelay::class);
         $queryBuilder = $repository->createQueryBuilder('d');
@@ -108,6 +111,31 @@ class ScheduleService
         $r = $queryBuilder->getQuery()->getResult();
 
         return (bool)$r;
+    }
+
+    public function isUserGotTooManyRequests(User $user): bool
+    {
+        /** @var StandUpDelayRepository $repository */
+        $repository = $this->em->getRepository(StandUpDelay::class);
+        $queryBuilder = $repository->createQueryBuilder('d');
+
+        $now = new \DateTime();
+
+        $queryBuilder->select('count(d.id)')
+            ->where($queryBuilder->expr()->between('d.sendAfter', ':date_from', ':date_to'))
+            ->andWhere('d.user = :user')
+            ->andWhere('d.config = :config')
+            ->setParameters(array(
+                'user' => $user,
+                'date_from' =>  ($now)->format('Y-m-d 00:00:00'),
+                'date_to' => ($now)->format('Y-m-d 23:59:59'),
+                'config' => $this->config
+            ));
+
+
+        $r = $queryBuilder->getQuery()->getSingleScalarResult();
+
+        return !$r || $r <= 3;
     }
 
     /**
