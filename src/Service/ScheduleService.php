@@ -133,9 +133,9 @@ class ScheduleService
             ));
 
 
-        $r = $queryBuilder->getQuery()->getSingleScalarResult();
+        $r = $queryBuilder->getQuery()->getSingleScalarResult();;
 
-        return !$r || $r <= 3;
+        return $r && $r >= 3;
     }
 
     /**

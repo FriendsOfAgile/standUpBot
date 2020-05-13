@@ -15,6 +15,7 @@ use App\Entity\StandUp;
 use App\Entity\StandUpConfig;
 use App\Entity\StandUpDelay;
 use App\Entity\User;
+use App\Exception\UnexpectedAnswerException;
 use App\Repository\ChatStateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -102,7 +103,7 @@ class StandUpService
         ]);
 
         if (!$state) {
-            throw new \Exception('Unexpected message');
+            throw new UnexpectedAnswerException('Unexpected message');
         }
 
         $answers = $state->getAnswers();

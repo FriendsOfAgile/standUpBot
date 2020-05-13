@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Exception\UnexpectedAnswerException;
+use App\Service\SlackService;
 use App\Service\StandUpService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,7 +16,7 @@ class SlackController extends AbstractController
     /**
      * @Route("/channels/slack/event", name="slack")
      */
-    public function event(Request $request, StandUpService $service, LoggerInterface $logger)
+    public function event(Request $request, StandUpService $service, LoggerInterface $logger, SlackService $slack)
     {
         $data = json_decode($request->getContent(), true);
         $action = $data['event']['type'] ?? ($data['type'] ?? null);
@@ -37,6 +39,8 @@ class SlackController extends AbstractController
 
                     try {
                         $service->processStandUp($user, $text);
+                    } catch (UnexpectedAnswerException $e) {
+                        $slack->postMessage($user, 'Sorry, it is not the time for stand up.');
                     } catch (\Exception $e) {
                         $logger->emergency('Exception on new event', ['message' => $e->getMessage(), 'request' => $data]);
                     }

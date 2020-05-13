@@ -2,12 +2,8 @@
 
 namespace App\Command;
 
-use App\Entity\ChatState;
-use App\Entity\Question;
 use App\Entity\Space;
-use App\Entity\StandUpDelay;
 use App\Service\ScheduleService;
-use App\Service\SlackService;
 use App\Service\StandUpService;
 use App\Traits\LoggerTrait;
 use Doctrine\ORM\EntityManagerInterface;
@@ -57,7 +53,6 @@ class StandUpCommand extends Command
 
             $configs = $space->getStandUpConfigs();
             $io->text(sprintf('Checking %s space. Found %d configs', $space->getName(), $configs->count()));
-
             foreach ($configs as $config) {
                 $this->service->setConfig($config);
                 $users = $this->service->getUsersToStandUp();
