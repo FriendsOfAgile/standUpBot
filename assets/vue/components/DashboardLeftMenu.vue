@@ -1,5 +1,5 @@
 <template>
-    <div class="px-6 py-4 h-fullVh shadow-xl space-y-6 flex flex-col items-center">
+    <div class="px-6 py-4 shadow-xl space-y-6 flex flex-col items-center left-menu">
         <router-link to="/">
             <img class="rounded-full" :src="userAvatar" />
         </router-link>
@@ -43,6 +43,9 @@
 </script>
 
 <style scoped>
+    .left-menu {
+        min-height: 100vh;
+    }
     .nav-item__tooltip {
         left: 2.5em;
         width: max-content;

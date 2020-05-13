@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full flex flex-col">
+    <div class="w-full flex flex-col pb-12 ">
         <div class="flex justify-between px-6 pt-6">
             <h3 v-if="!showEditNameInput" class="font-bold text-2xl text-gray-700 cursor-pointer" @click="showEditNameInput = true, focusInput('standupName')"><span class="font-normal">Standup</span> {{ getStandUpName }}</h3>
             <input v-if="showEditNameInput" ref="standupName" class="focus:outline-none w-3/4 text-gray-700 px-3 text-2xl font-bold" type="text" v-model="standUpData.name" @input="compareConfig" @keyup.enter="showEditNameInput = false" @blur="showEditNameInput = false">
@@ -35,14 +35,13 @@
                 <h3 class="text-lg font-bold text-gray-700 border-b-4 mt-4 mb-2 border-gray-400 transition duration-300 ease-in-out w-content cursor-pointer" :class="{'border-accentColor': activeTab === 'members'}" @click="activeTab = 'members'">Members</h3>
             </div>
 
-            <transition name="component-fade" mode="out-in">
                 <div class="flex flex-col p-1 mt-2" v-if="activeTab === 'questions'">
                     <div class="flex flex-col ">
-                        <div class="w-full flex-flex-col" v-for="(question, index) in standUpData.questions" :key="question['@id']">
-                            <div class="mt-4 w-full flex items-center relative space-x-3">
+                        <div class="w-full flex-flex-col space-y-1" v-for="(question, index) in standUpData.questions" :key="question['@id']">
+                            <div class="mt-4 w-full flex items-center relative">
                                 <font-awesome-icon icon="trash-alt" class="text-red-400 mr-1 cursor-pointer text-xl" @click="deleteQuestion(index)"/>
-                                <font-awesome-icon icon="eye-dropper" class="text-xl mr-4 text-gray-500 cursor-pointer" @click="showColorPicker = index"/>
-                                <input class="border-l-4  py-1 px-2 focus:outline-none w-full" type="text" :style="{'border-color': question.color}" v-model="question.text" @input="compareConfig" />
+                                <font-awesome-icon icon="eye-dropper" class="ml-4 text-xl mr-4 text-gray-500 cursor-pointer" @click="showColorPicker = index"/>
+                                <input class="ml-2 border-l-8 px-3 focus:outline-none w-full" type="text" :style="{'border-color': question.color}" v-model="question.text" @input="compareConfig" />
                                 <transition name="fade">
                                     <div class="color-picker-container p-2 z-max" v-if="showColorPicker === index" @mouseleave="showColorPicker = false">
                                         <v-swatches v-model="question.color" @input="compareConfig(), showColorPicker = false" popover-y="up" inline="true"/>
@@ -51,10 +50,10 @@
                             </div>
                         </div>
                         <transition name="component-fade" mode="out-in">
-                            <div class="mt-4 w-full flex items-center relative space-x-3" :style="{'border-color': newQuestion.color}" v-if="showNewQuestionInput" @keyup.enter="addQuestionToConfig">
-                                <font-awesome-icon icon="check" v-if="newQuestion.text.length" class="text-xl text-green-500 cursor-pointer" @click="addQuestionToConfig"/>
-                                <font-awesome-icon icon="eye-dropper" v-if="newQuestion.text" class="text-xl ml-auto text-gray-500 cursor-pointer" @click="showColorPicker = 'newQuestion'"/>
-                                <input class="w-full border-l-4 py-1 px-2 focus:outline-none question-input"  :class="{'ml-1': newQuestion.text && newQuestion.text.length}" placeholder="Enter your question" ref="question" v-model="newQuestion.text" type="text" @input="compareConfig" @blur="addQuestionToConfig"/>
+                            <div class="mt-4 w-full flex items-center relative" :style="{'border-color': newQuestion.color}" v-if="showNewQuestionInput" @keyup.enter="addQuestionToConfig">
+                                <font-awesome-icon icon="check" v-if="newQuestion.text.length" class="text-xl mr-1 text-green-500 cursor-pointer" @click="addQuestionToConfig"/>
+                                <font-awesome-icon icon="eye-dropper" v-if="newQuestion.text" class="ml-4 text-xl mr-4 text-gray-500 cursor-pointer" @click="showColorPicker = 'newQuestion'"/>
+                                <input class="w-full border-l-8 px-3 focus:outline-none question-input"  :class="{'ml-1': newQuestion.text && newQuestion.text.length}" placeholder="Enter your question" ref="question" v-model="newQuestion.text" type="text" @input="compareConfig" @blur="addQuestionToConfig"/>
                                 <div class="color-picker-container p-2 z-max" v-if="showColorPicker === 'newQuestion'" @mouseleave="showColorPicker = false">
                                     <v-swatches v-model="newQuestion.color" @input="showColorPicker = false" popover-y="up" inline="true"/>
                                 </div>
@@ -66,13 +65,36 @@
                         </div>
                     </div>
                 </div>
-            </transition>
 
-            <transition name="component-fade" mode="out-in">
+
+
                 <div class="flex flex-col p-1 mt-2" v-if="activeTab === 'members'">
-                    {{ workspaceMembers }}
+                    <div class="w-full" v-if="standUpData.members.length">
+                        {{ standUpData.members }}
+                        <!-- Members -->
+                    </div>
+                    <div class="w-full">
+                        <h3 class="text-xl font-bold pb-6 text-gray-700">There are no members yet :( Type in username in field below and add some members to the standup team!</h3>
+                        <label for="searchMembers" class="text-gray-500">Search members:
+                            <input id="searchMembers" class="focus:outline-none w-full text-gray-700 border border-gray-500 rounded mt-2 p-3" autofocus type="text" placeholder="Enter username" v-model="searchMembersInput">
+                        </label>
+                        <button class="bg-gray-500 mt-4 focus:outline-none hover:bg-accentColor text-white text-sm font-bold py-2 px-4 w-content" @click="membersFiltered = workspaceMembers" v-if="!membersFiltered.length">show all workspace members</button>
+                        <button class="bg-gray-500 mt-4 focus:outline-none hover:bg-accentColor text-white text-sm font-bold py-2 px-4 w-content" @click="membersFiltered = []" v-else >hide all workspace members</button>
+                        <transition name="component-fade" mode="out-in">
+                            <div class="w-full grid grid-cols-6 gap-4 mt-4" v-if="membersFiltered.length">
+                                <div class="p-4 flex flex-col justify-center items-center cursor-pointer transition duration-300 ease-in-out hover:shadow-lg" v-for="member in membersFiltered" :key="member.name">
+                                    <div @click="addMemberToConfig(member)">
+                                        <img class="w-auto m-auto rounded-full" :src="member.avatar"/>
+                                        <div class="w-full text-center mt-4 text-lg">
+                                            {{ member.name }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </transition>
+                    </div>
                 </div>
-            </transition>
+
 
         </div>
 
@@ -116,6 +138,8 @@
         edited: false,
         dataLoaded: false,
         workspaceMembers: [],
+        searchMembersInput: "",
+        membersFiltered: [],
         errors: [],
       }
     },
@@ -143,6 +167,18 @@
       deleteQuestion(index) {
         this.standUpData.questions.splice(index, 1);
         this.compareConfig();
+      },
+      addMemberToConfig(data) {
+        console.log('addMember: ', data);
+        const member = {
+          config: this.standUpData["@id"],
+          uid: data.uid,
+          "canRead": true,
+          "canWrite": true,
+          "canEdit": false,
+        };
+       // this.$loading(true);
+       return this.$store.dispatch('ADD_MEMBER_TO_CONFIG', member)
       },
       saveStandUpConfig(configData) {
         this.$loading(true);
@@ -191,6 +227,12 @@
       closeErrorsModal() {
         this.errors = [];
         this.$modal.hide('errors-modal');
+      },
+      getMemberFromWorkSpace(data, type) {
+        if(type === 'byName') {
+          let username = data;
+          this.membersFiltered = this.workspaceMembers.filter( (item) => item.name.toLowerCase().includes(username.toLowerCase()));
+        }
       }
     },
     computed: {
@@ -245,6 +287,12 @@
         this.dataLoaded = true;
       }
     },
+
+    watch: {
+      searchMembersInput(username) {
+        this.getMemberFromWorkSpace(username, 'byName');
+      }
+    }
   }
 </script>
 
