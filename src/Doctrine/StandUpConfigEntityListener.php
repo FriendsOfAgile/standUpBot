@@ -55,6 +55,7 @@ class StandUpConfigEntityListener
                     ->setCanRead(true)
                     ->setCanEdit(true)
                     ->setConfig($object);
+                $object->addMember($member);
             }
         }
     }
