@@ -81,7 +81,7 @@ class StandUpConfig
     /**
      * @Assert\Valid()
      * @Groups({"config:write", "config:read"})
-     * @ORM\OneToMany(targetEntity="App\Entity\Member", mappedBy="config", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Member", mappedBy="config", orphanRemoval=true, cascade={"persist"})
      */
     private $members;
 
