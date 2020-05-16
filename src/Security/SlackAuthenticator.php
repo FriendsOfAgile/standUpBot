@@ -8,8 +8,6 @@
 
 namespace App\Security;
 
-
-use App\Entity\Member;
 use App\Entity\User;
 use App\Service\SlackSpaceService;
 use Doctrine\ORM\EntityManagerInterface;
