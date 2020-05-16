@@ -41,7 +41,7 @@
                             <div class="mt-4 w-full flex items-center relative">
                                 <font-awesome-icon icon="trash-alt" class="text-red-400 mr-1 cursor-pointer text-xl" @click="deleteQuestion(index)"/>
                                 <font-awesome-icon icon="eye-dropper" class="ml-4 text-xl mr-4 text-gray-500 cursor-pointer" @click="showColorPicker = index"/>
-                                <input class="ml-2 border-l-8 px-3 focus:outline-none w-full" type="text" :style="{'border-color': question.color}" v-model="question.text" @input="compareConfig" />
+                                <input class="ml-2 border-l-8 px-3 focus:outline-none w-full cursor-pointer" type="text" :style="{'border-color': question.color}" v-model="question.text" @input="compareConfig" />
                                 <transition name="fade">
                                     <div class="color-picker-container p-2 z-max" v-if="showColorPicker === index" @mouseleave="showColorPicker = false">
                                         <v-swatches v-model="question.color" @input="compareConfig(), showColorPicker = false" popover-y="up" inline="true"/>
