@@ -169,7 +169,7 @@ class SlackService
 
         $params = array(
             'channel' => $target,
-            'text' => sprintf('%s posted update for %s stand-up', $user->getName(), $standUp->getConfig()->getName()),
+            'text' => sprintf('%s posted an update for %s', $user->getName(), $standUp->getConfig()->getName()),
             'as_user' => false,
             'icon_url' => $user->getAvatar(),
             'username' => $user->getName(),
