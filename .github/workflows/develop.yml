@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-        run: npm install
+      - run: npm install
 
       - name: Build Vue App
         run: npm run build
@@ -64,7 +64,7 @@ jobs:
           target: /home/${{ secrets.USERNAME }}/web/${{ secrets.HOST }}/public_html/
           rm: true
 
-      - name: Flush Database
+      - name: Update Database schema
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
