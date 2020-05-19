@@ -23,9 +23,15 @@ Sentry.init({
   integrations: [new VueIntegration({Vue, attachProps: true})],
 });
 
+if (window.user) {
+  Sentry.configureScope(function (scope) {
+    scope.setUser({email: window.user.email, username: window.user.name, id: window.user.id});
+  });
+}
+
 library.add(faCogs, faChartPie, faEdit, faCheck, faSave, faPlus, faEyeDropper, faTrashAlt);
 
-Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(VueLodash, {lodash:lodash})
 Vue.use(VueLoading, {
