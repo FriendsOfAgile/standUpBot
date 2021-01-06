@@ -15,7 +15,7 @@
         "@fortawesome/vue-fontawesome": "^0.1.9",
         "@sentry/browser": "^5.15.5",
         "@sentry/integrations": "^5.15.5",
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "core-js": "^3.6.4",
         "fs": "0.0.1-security",
         "lodash": "^4.17.15",
